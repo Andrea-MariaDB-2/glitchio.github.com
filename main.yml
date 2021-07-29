@@ -1,0 +1,2660 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Runs a single command using the runners shell
+      - name: Run a one-line script
+        run: echo Hello, world!
+
+      # Runs a set of commands using the runners shell
+      - name: Run a multi-line script
+        run: |
+          echo Add other actions to build,
+          echo test, and deploy your project.
+- name: Upload a Build Artifact
+  uses: actions/upload-artifact@v2.2.4
+  with:
+    # Artifact name
+    name: # optional, default is artifact
+    # A file, directory or wildcard pattern that describes what to upload
+    path: 
+    # The desired behavior if no files are found using the provided path.
+Available Options:
+  warn: Output a warning but do not fail the action
+  error: Fail the action with an error message
+  ignore: Do not output any warnings or errors, the action does not fail
+
+    if-no-files-found: # optional, default is warn
+    # Duration after which artifact will expire in days. 0 means using default retention.
+Minimum 1 day. Maximum 90 days unless changed from the repository settings page.
+
+    retention-days: # optional
+    - name: Setup Go environment
+  uses: actions/setup-go@v2.1.3
+  with:
+    # The Go version to download (if necessary) and use. Supports semver spec and ranges.
+    go-version: # optional
+    # Whether to download only stable versions
+    stable: # optional, default is true
+    # Used to pull node distributions from go-versions.  Since there's a default, this is typically not supplied by the user.
+    token: # optional, default is ${{ github.token }}
+    - name: Setup Java JDK
+  uses: actions/setup-java@v2.1.0
+  with:
+    # The Java version to set up. Takes a whole or semver Java version. See examples of supported syntax in README file
+    java-version: 
+    # Java distribution. See the list of supported distributions in README file
+    distribution: 
+    # The package type (jdk, jre, jdk+fx, jre+fx)
+    java-package: # optional, default is jdk
+    # The architecture of the package
+    architecture: # optional, default is x64
+    # Path to where the compressed JDK is located
+    jdkFile: # optional
+    # Set this option if you want the action to check for the latest available version that satisfies the version spec
+    check-latest: # optional
+    # ID of the distributionManagement repository in the pom.xml file. Default is `github`
+    server-id: # optional, default is github
+    # Environment variable name for the username for authentication to the Apache Maven repository. Default is $GITHUB_ACTOR
+    server-username: # optional, default is GITHUB_ACTOR
+    # Environment variable name for password or token for authentication to the Apache Maven repository. Default is $GITHUB_TOKEN
+    server-password: # optional, default is GITHUB_TOKEN
+    # Path to where the settings.xml file will be written. Default is ~/.m2.
+    settings-path: # optional
+    # Overwrite the settings.xml file if it exists. Default is "true".
+    overwrite-settings: # optional, default is true
+    # GPG private key to import. Default is empty string.
+    gpg-private-key: # optional
+    # Environment variable name for the GPG private key passphrase. Default is $GPG_PASSPHRASE.
+    gpg-passphrase: # optional
+    - name: Setup .NET Core SDK
+  uses: actions/setup-dotnet@v1.8.1
+  with:
+    # Optional SDK version to use. If not provided, will install global.json version when available. Examples: 2.2.104, 3.1, 3.1.x
+    dotnet-version: # optional
+    # Optional package source for which to set up authentication. Will consult any existing NuGet.config in the root of the repo and provide a temporary NuGet.config using the NUGET_AUTH_TOKEN environment variable as a ClearTextPassword
+    source-url: # optional
+    # Optional OWNER for using packages from GitHub Package Registry organizations/users other than the current repository's owner. Only used if a GPR URL is also provided in source-url
+    owner: # optional
+    # Optional NuGet.config location, if your NuGet.config isn't located in the root of the repo.
+    config-file: # optional
+    # Whether prerelease versions should be matched with non-exact versions (for example 5.0.0-preview.6 being matched by 5, 5.0, 5.x or 5.0.x). Defaults to false if not provided.
+    include-prerelease: # optional
+    - name: First interaction
+  uses: actions/first-interaction@v1.1.0
+  with:
+    # Token for the repository. Can be passed in using {{ secrets.GITHUB_TOKEN }}
+    repo-token: 
+    # Comment to post on an individual's first issue
+    issue-message: # optional
+    # Comment to post on an individual's first pull request
+    pr-message: # optional
+    - name: Trigger Buildkite Pipeline
+  # You may pin to the exact commit or the version.
+  # uses: buildkite/trigger-pipeline-action@d03b6f2760252274dc019e1298095c3b61baeaf8
+  uses: buildkite/trigger-pipeline-action@v1.2.0
+  - name: Terraform Apply for GorillaStack
+  # You may pin to the exact commit or the version.
+  # uses: GorillaStack/github-action-apply-on-merge@71fab58db0a839b1e9b34e87601a5e4347c52c88
+  uses: GorillaStack/github-action-apply-on-merge@v0.1.0
+  with:
+    # The action type (currently "validate" and "apply" are available)
+    action: # default is validate
+    # The name of the tfstate bucket stack
+    stack_name: # default is github-actions-gorillastack-tfstate
+    # The region in which you deployed the tfstate bucket stack
+    aws_default_region: # default is us-east-1
+    # The AWS Access Key Id for the user with privileges to access the tfstate bucket
+    aws_access_key_id: # default is defaulted-for-everything-but-apply
+    # The AWS Secret Access Key for the user with privileges to access the tfstate bucket
+    aws_secret_access_key: # default is defaulted-for-everything-but-apply
+    # GorillaStack API Key, which is read-write or read-only, tied to your user identity
+    gorillastack_api_key: # default is defaulted-for-everything-but-apply
+    # GorillaStack Team Id, sets context of which team/tenant you are targeting
+    gorillastack_team_id: # default is defaulted-for-everything-but-apply
+    - name: Deploy to Cloudflare Workers with Wrangler
+  # You may pin to the exact commit or the version.
+  # uses: cloudflare/wrangler-action@21f14faa062c33c938e3f37c30d52021bed521cb
+  uses: cloudflare/wrangler-action@1.2.0
+  with:
+    # (Legacy) Your Cloudflare API Key
+    apiKey: # optional
+    # Your Cloudflare API Token
+    apiToken: # optional
+    # (Legacy) Your Cloudflare Email
+    email: # optional
+    # The environment you'd like to publish your Workers project to - must be defined in wrangler.toml
+    environment: # optional
+    # The relative path which Wrangler commands should be run from
+    workingDirectory: # optional
+    # The version of Wrangler you'd like to use to publish your Workers project
+    wranglerVersion: # optional
+    # A new line deliminated string of environment variable names that should be configured as Worker secrets
+    secrets: # optional
+    - name: HashiCorp - Setup Terraform
+  # You may pin to the exact commit or the version.
+  # uses: hashicorp/setup-terraform@d22444889af304a44b997011fbabb81ff705a7b4
+  uses: hashicorp/setup-terraform@v1.2.1
+  with:
+    # The hostname of a Terraform Cloud/Enterprise instance to place within the credentials block of the Terraform CLI configuration file. Defaults to `app.terraform.io`.
+    cli_config_credentials_hostname: # optional, default is app.terraform.io
+    # The API token for a Terraform Cloud/Enterprise instance to place within the credentials block of the Terraform CLI configuration file.
+    cli_config_credentials_token: # optional
+    # The version of Terraform CLI to install. Instead of full version string you can also specify constraint string starting with "<" (for example `<1.13.0`) to install the latest version satisfying the constraint. A value of `latest` will install the latest version of Terraform CLI. Defaults to `latest`.
+    terraform_version: # optional, default is latest
+    # Whether or not to install a wrapper to wrap subsequent calls of the `terraform` binary and expose its STDOUT, STDERR, and exit code as outputs named `stdout`, `stderr`, and `exitcode` respectively. Defaults to `true`.
+    terraform_wrapper: # optional, default is true
+    - name: Set up gcloud Cloud SDK environment
+  # You may pin to the exact commit or the version.
+  # uses: google-github-actions/setup-gcloud@94337306dda8180d967a56932ceb4ddcf01edae7
+  uses: google-github-actions/setup-gcloud@v0.2.0
+  with:
+    # Version of the gcloud SDK to install. If unspecified or set to "latest",
+the latest available gcloud SDK version for the target platform will be
+installed. Example: "290.0.1".
+    version: # optional, default is latest
+    # Service account email address to use for authentication. This is required
+for legacy .p12 keys but can be omitted for .json keys. This is usually of
+the format <name>@<project-id>.iam.gserviceaccount.com.
+    service_account_email: # optional
+    # Service account key to use for authentication. This should be the JSON
+formatted private key which can be exported from the Cloud Console. The
+value can be raw or base64-encoded.
+    service_account_key: # optional
+    # ID of the Google Cloud project. If provided, this will configure gcloud to
+use this project ID by default for commands. Individual commands can still
+override the project using the --project flag which takes precedence.
+    project_id: # optional
+    # Export the provided credentials as Google Default Application Credentials.
+This will make the credentials available to later steps via the
+GOOGLE_APPLICATION_CREDENTIALS environment variable. Future steps that
+consume Default Application Credentials will automatically detect and use
+these credentials.
+    export_default_credentials: # optional
+    - name: Lightstep Services Change Report
+  # You may pin to the exact commit or the version.
+  # uses: lightstep/lightstep-action-snapshot@166ec5f31d611858ebe9ed3437848e8fe675fb89
+  uses: lightstep/lightstep-action-snapshot@v0.2.1
+  with:
+    # The organization associated with your Lightstep account (usually your company name)
+    lightstep_organization: # optional
+    # The Lightstep project associated with this repository
+    lightstep_project: # optional
+    # Only show services in the snapshot from this comma-separated list
+    lightstep_service_filter: # optional
+    # The query to use when taking a snapshot
+    lightstep_snapshot_query: # optional
+    # The Lightstep snapshot id to summarize
+    lightstep_snapshot_id: # optional
+    # The Lightstep snapshot id to compare with lightstep_snapshot_id
+    lightstep_snapshot_compare_id: # optional
+    # The key to access the Lightstep Public API
+    lightstep_api_key: # optional
+    # Github API Token
+    github_token: # optional
+    # If set to true, will not add a comment to pull-requests
+    disable_comment: # optional
+    - name: Lightstep Pre-Deploy Check
+  # You may pin to the exact commit or the version.
+  # uses: lightstep/lightstep-action-predeploy@22bec553a6d0fb3de5026acb1159085601f76408
+  uses: lightstep/lightstep-action-predeploy@v0.2.6
+  with:
+    # The organization associated with your Lightstep account (usually your company name)
+    lightstep_organization: # optional
+    # The Lightstep project associated with this repository
+    lightstep_project: # optional
+    # The key to access the Lightstep Public API
+    lightstep_api_key: # optional
+    # The token to access the Rollbar API
+    rollbar_api_token: # optional
+    # The token to access the PagerDuty API
+    pagerduty_api_token: # optional
+    # If set to true, collapse all conditions to a single table row
+    rollup_conditions: # optional
+    # If set to true, will not add a comment to pull-requests
+    disable_comment: # optional
+    - name: AWS CloudFormation "Deploy CloudFormation Stack" Action for GitHub Actions
+  # You may pin to the exact commit or the version.
+  # uses: aws-actions/aws-cloudformation-github-deploy@dfbee8a4fec90af61b71bafda3890f8c4a2075ef
+  uses: aws-actions/aws-cloudformation-github-deploy@v1.0.3
+  with:
+    # The name of the CloudFormation stack
+    name: 
+    # The path or URL to the CloudFormation template
+    template: 
+    # The comma-delimited list of stack template capabilities to acknowledge. Defaults to 'CAPABILITY_IAM'
+    capabilities: # optional, default is CAPABILITY_IAM
+    # The parameters to override in the stack inputs. The list is comma-delimited, with each entry formatted as <ParameterName>=<ParameterValue>.
+    parameter-overrides: # optional
+    # If the CloudFormation change set is empty, do not fail. Defaults to '0' (will fail on empty change set)
+    no-fail-on-empty-changeset: # optional, default is 0
+    # Disable rollback of the stack if stack creation fails. Defaults to '0' (will rollback if stack creation fails). This input is only used for stack creation, not for stack update
+    disable-rollback: # optional, default is 0
+    # The amount of time that can pass before the stack status becomes CREATE_FAILED. This input is only used for stack creation, not for stack update
+    timeout-in-minutes: # optional
+    # The comma-delimited list of Amazon SNS topic ARNs to publish stack related events
+    notification-arns: # optional
+    # The Amazon Resource Name (ARN) of an AWS Identity and Access Management (IAM) role that AWS CloudFormation assumes to create the stack. AWS CloudFormation uses the role's credentials to make calls on your behalf. AWS CloudFormation always uses this role for all future operations on the stack. As long as users have permission to operate on the stack, AWS CloudFormation uses this role even if the users don't have permission to pass it. Ensure that the role grants least privilege. If you don't specify a value, AWS CloudFormation uses the role that was previously associated with the stack
+    role-arn: # optional
+    # Key-value pairs to associate with this stack. This input should be JSON-formatted, for example [ { "Key": "string", "Value": "string" } ]
+    tags: # optional
+    # Whether to enable termination protection on the specified stack. Defaults to '0' (terminated protection will be disabled) This input is only used for stack creation, not for stack update
+    termination-protection: # optional, default is 0
+    - name: Amazon ECR "Login" Action for GitHub Actions
+  # You may pin to the exact commit or the version.
+  # uses: aws-actions/amazon-ecr-login@aaf69d68aa3fb14c1d5a6be9ac61fe15b48453a2
+  uses: aws-actions/amazon-ecr-login@v1
+  with:
+    # A comma-delimited list of AWS account IDs that are associated with the ECR registries. If you do not specify a registry, the default ECR registry is assumed.
+    registries: # optional
+    # Whether to skip explicit logout of the registries during post-job cleanup. Exists for backward compatibility on self-hosted runners. Not recommended.
+    skip-logout: # optional
+    - name: EKS on Fargate
+  # You may pin to the exact commit or the version.
+  # uses: aws-actions/amazon-eks-fargate@fa91b1ce6e342eb17a1d57df976506d02f074640
+  uses: aws-actions/amazon-eks-fargate@v0.1.1
+  - name: OpenShift Login
+  # You may pin to the exact commit or the version.
+  # uses: redhat-actions/oc-login@11b98b2a0c4b972c9791d58edbf378ce0f060359
+  uses: redhat-actions/oc-login@v1.1
+  with:
+    # Openshift Server URL.
+    openshift_server_url: 
+    # Openshift Bearer Token. Store in a secret.
+    openshift_token: # optional
+    # Openshift Username. Must be used with openshift_password.
+    openshift_username: # optional
+    # Openshift Password. Store in a secret. Must be used with openshift_username.
+    openshift_password: # optional
+    # Skip TLS certificate verification when connecting to the cluster.
+    insecure_skip_tls_verify: # optional, default is false
+    # Contents of a Certificate Authority (.crt) file for your cluster's SSL certificate. Store in a secret.
+    certificate_authority_data: # optional
+    # Set current context's namespace to this, after logging in.
+    namespace: # optional
+    # "By default, the cluster name is masked, since it can be used to derive the server URL.
+Set this to true to skip masking the cluster name."
+
+    reveal_cluster_name: # optional, default is false
+    - name: Install Octopus CLI
+  # You may pin to the exact commit or the version.
+  # uses: OctopusDeploy/install-octopus-cli-action@aee5b620e9107e6ef3ae0cbd25dfde10e0910168
+  uses: OctopusDeploy/install-octopus-cli-action@v1.1.6
+  with:
+    # Octopus CLI version
+    version: # optional, default is latest
+    - name: Push To Registry
+  # You may pin to the exact commit or the version.
+  # uses: redhat-actions/push-to-registry@97623df94312db8bb23fd8c42b747583175b999d
+  uses: redhat-actions/push-to-registry@v2
+  with:
+    # Name of the image to push (e.g. username/imagename or imagename)
+    image: 
+    # The tag or tags of the image to push. For multiple tags, seperate by a space. For example, "latest v1"
+    tags: # optional, default is latest
+    # Hostname and optional namespace to push the image to (eg. quay.io/username or quay.io)
+    registry: 
+    # Username to use as credential to authenticate to the registry
+    username: # optional
+    # Password to use as credential to authenticate to the registry
+    password: # optional
+    # Verify TLS certificates when contacting the registry
+    tls-verify: # optional, default is true
+    # After copying the image, write the digest of the resulting image to the file.
+By default, the filename will be determined from the image and tag.
+The contents of this file are the digest output.
+
+    digestfile: # optional
+    # Extra args to be passed to podman push.
+Separate arguments by newline. Do not use quotes - @actions/exec will do the quoting for you.
+
+    extra-args: # optional
+    - name: Run Runbook in Octopus Deploy
+  # You may pin to the exact commit or the version.
+  # uses: OctopusDeploy/run-runbook-action@042dd45c396e343ebf30ebdeb61be4266b9de03a
+  uses: OctopusDeploy/run-runbook-action@v1.0.0
+  with:
+    # The API key used to access Octopus Deploy. You must provide an API key or username and password. If the guest account is enabled, a key of API-GUEST may be used. It is strongly recommended that this value retrieved from a GitHub secret.
+    api_key: # optional
+    # Cancel the deployment if the deployment_timeout is exceeded (the default timeout is 10 minutes).
+    cancel_on_timeout: # optional, default is false
+    # The path to a configuration file of default values with one "key=value" per line.
+    config_file: # optional
+    # Enable debug logging.
+    debug: # optional, default is false
+    # A comma-delimited list of environments in Octopus Deploy in which to run (i.e. "Dev,Test,Prod").
+    environments: # optional
+    # A comma-separated list of machine names to exclude in the deployed environment. If empty, all machines in the environment will be considered.
+    exclude_machines: # optional
+    # Force download of installed packages.
+    force_package_download: # optional, default is false
+    # Use Guided Failure mode.
+    guided_failure: # optional, default is false
+    # Ignore certificate errors when communicating with Octopus Deploy. Warning: enabling this option creates a security vulnerability.
+    ignore_ssl_errors: # optional, default is false
+    # The log level; valid options are "verbose", "debug", "information", "warning", "error", and "fatal".
+    log_level: # optional, default is debug
+    # Print the raw log of failed tasks.
+    no_raw_log: # optional, default is false
+    # The time at which scheduled runbook run should expire, specified as any valid DateTimeOffset format, and assuming the time zone is the current local time zone.
+    no_run_after: # optional
+    # The password to used to authenticate with Octopus Deploy. It is strongly recommended to retrieve this value from a GitHub secret.
+    password: # optional
+    # The name or ID of the project associated with this runbook.
+    project: 
+    # The URL of a proxy to use (i.e. https://proxy.example.com).
+    proxy: # optional
+    # The password used to connect to a proxy. It is strongly recommended to retrieve this value from a GitHub secret. If proxy_username and proxy_password are omitted and proxy URL is specified, the default credentials are used.
+    proxy_password: # optional
+    # The username used to connect to a proxy. It is strongly recommended to retrieve this value from a GitHub secret.
+    proxy_username: # optional
+    # Redirect the raw log of failed tasks to a file.
+    raw_log_file: # optional
+    # The time at which runbook run should start (scheduled run), specified as any valid DateTimeOffset format, and assuming the time zone is the current local time zone.
+    run_at: # optional
+    # The name or ID of the runbook. If the name is supplied, the project input value must also be specified.
+    runbook: # optional
+    # The maximum length of time that the console session will wait for the runbook run to finish. Note: This will not stop the run. This input requires the wait_for_run input value to be true (format: HH:MM:SS). The default is 10 minutes.
+    run_timeout: # optional, default is 00:10:00
+    # The base URL hosting Octopus Deploy (i.e. "https://octopus.example.com/"). It is recommended to retrieve this value from an environment variable.
+    server: # optional
+    # Show progress of the runbook.
+    show_progress: # optional, default is false
+    # Skip a step by name.
+    skip: # optional
+    # The name or ID of a space within which this command will be executed. If omitted, the default space will be used.
+    space: # optional
+    # A comma-separated list of machine names to target in the deployed environment. If not specified all machines in the environment will be considered.
+    specific_machines: # optional
+    # Create a deployment for the tenant with this name or ID; specify this argument multiple times to add multiple tenants or use a wildcard ("*") to deploy to all tenants who are ready for this release (according to lifecycle).
+    tenant: # optional
+    # Create a deployment for tenants matching this tag; specify this argument multiple times to build a query/filter with multiple tags.
+    tenant_tag: # optional
+    # A timeout value in seconds for network operations.
+    timeout: # optional, default is 600
+    # The username used to authenticate with Octopus Deploy. You must provide an apiKey or username and password. It is strongly recommended to retrieve this value from a GitHub secret.
+    username: # optional
+    # Values for any prompted variables in the format, Label:Value. For JSON values, embedded quotation marks should be escaped with a backslash.
+    variable: # optional
+    # Indicates whether or not to wait synchronously for deployment to finish.
+    wait_for_run: # optional, default is false
+    - name: Knative Service Manager
+  # You may pin to the exact commit or the version.
+  # uses: redhat-actions/kn-service-manager@9d456952c2b59c36db2bb2b83adfa983b1c787a4
+  uses: redhat-actions/kn-service-manager@v1
+  with:
+    # The Knative Service Name
+    service_name: 
+    # The Kubernetes Namespace to deploy to. Defaults to current context's namespace.
+    namespace: # optional
+    # The Knative service command, accepted commands are create, update, apply and delete
+    command: # optional, default is create
+    # The Knative Service Image
+    container_image: 
+    # Any extra arguments to append to the kn <command>
+    kn_extra_args: # optional
+    # The registry user to use to create the image pull secret
+    registry_user: # optional
+    # The registry user password
+    registry_password: # optional
+    # "Pass --force to kn create. If the service already exists,
+the service will be replaced, instead of kn create failing.
+This input has no effect if command is not create"
+
+    force_create: # optional, default is false
+    - name: Codefresh pipeline runner
+  # You may pin to the exact commit or the version.
+  # uses: codefresh-io/codefresh-pipeline-runner@c563a2bb98a7b8522192aaabf79ee9504141f8dc
+  uses: codefresh-io/codefresh-pipeline-runner@v7
+  with:
+    # codefresh cli build variables, see https://codefresh-io.github.io/cli/pipelines/run-pipeline/#setting-variables-through-the-command for more information.
+    args: # optional
+    - name: OpenShift Client Installer
+  # You may pin to the exact commit or the version.
+  # uses: redhat-actions/oc-installer@a129dec08aa1cd54ee1e0ac0ebcfbf7b12720582
+  uses: redhat-actions/oc-installer@v1
+  with:
+    # "oc version to install. It can be a version (eg. 4.6) or a URL pointing to an oc download.
+If left blank, the latest oc is installed."
+
+    oc_version: # default is latest
+    - name: Amazon ECS "Deploy Task Definition" Action for GitHub Actions
+  # You may pin to the exact commit or the version.
+  # uses: aws-actions/amazon-ecs-deploy-task-definition@be5e7e808de82dcbdf37f44c28308a1466873319
+  uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+  with:
+    # The path to the ECS task definition file to register
+    task-definition: 
+    # The name of the ECS service to deploy to. The action will only register the task definition if no service is given.
+    service: # optional
+    # The name of the ECS service's cluster.  Will default to the 'default' cluster
+    cluster: # optional
+    # Whether to wait for the ECS service to reach stable state after deploying the new task definition. Valid value is "true". Will default to not waiting.
+    wait-for-service-stability: # optional
+    # How long to wait for the ECS service to reach stable state, in minutes (default: 30 minutes, max: 6 hours). For CodeDeploy deployments, any wait time configured in the CodeDeploy deployment group will be added to this value.
+    wait-for-minutes: # optional
+    # The path to the AWS CodeDeploy AppSpec file, if the ECS service uses the CODE_DEPLOY deployment controller. Will default to 'appspec.yaml'.
+    codedeploy-appspec: # optional
+    # The name of the AWS CodeDeploy application, if the ECS service uses the CODE_DEPLOY deployment controller. Will default to 'AppECS-{cluster}-{service}'.
+    codedeploy-application: # optional
+    # The name of the AWS CodeDeploy deployment group, if the ECS service uses the CODE_DEPLOY deployment controller. Will default to 'DgpECS-{cluster}-{service}'.
+    codedeploy-deployment-group: # optional
+    # Whether to force a new deployment of the service. Valid value is "true". Will default to not force a new deployment.
+    force-new-deployment: # optional
+    - name: "Configure AWS Credentials" Action For GitHub Actions
+  # You may pin to the exact commit or the version.
+  # uses: aws-actions/configure-aws-credentials@0d9a5be0dceea74e09396820e1e522ba4a110d2f
+  uses: aws-actions/configure-aws-credentials@v1
+  with:
+    # AWS Access Key ID. This input is required if running in the GitHub hosted environment. It is optional if running in a self-hosted environment that already has AWS credentials, for example on an EC2 instance.
+    aws-access-key-id: # optional
+    # AWS Secret Access Key. This input is required if running in the GitHub hosted environment. It is optional if running in a self-hosted environment that already has AWS credentials, for example on an EC2 instance.
+    aws-secret-access-key: # optional
+    # AWS Session Token
+    aws-session-token: # optional
+    # AWS Region, e.g. us-east-2
+    aws-region: 
+    # Whether to set the AWS account ID for these credentials as a secret value, so that it is masked in logs. Valid values are 'true' and 'false'. Defaults to true
+    mask-aws-account-id: # optional
+    # Use the provided credentials to assume an IAM role and configure the Actions environment with the assumed role credentials rather than with the provided credentials
+    role-to-assume: # optional
+    # Role duration in seconds (default: 6 hours)
+    role-duration-seconds: # optional
+    # Role session name (default: GitHubActions)
+    role-session-name: # optional
+    # The external ID of the role to assume
+    role-external-id: # optional
+    # Skip session tagging during role assumption
+    role-skip-session-tagging: # optional
+    - name: Amazon ECS "Render Task Definition" Action for GitHub Actions
+  # You may pin to the exact commit or the version.
+  # uses: aws-actions/amazon-ecs-render-task-definition@a57ab12703135f8b9f0ca8ded65743a2a4fd9743
+  uses: aws-actions/amazon-ecs-render-task-definition@v1
+  with:
+    # The path to the ECS task definition JSON file
+    task-definition: 
+    # The name of the container defined in the containerDefinitions section of the ECS task definition
+    container-name: 
+    # The URI of the container image to insert into the ECS task definition
+    image: 
+    - name: Setup Pulumi CLI
+  # You may pin to the exact commit or the version.
+  # uses: pulumi/setup-pulumi@b374ceb6168550de27c6eba92e01c1a774040e11
+  uses: pulumi/setup-pulumi@v2.0.0
+  with:
+    # Version of the Pulumi CLI to install, or 'latest' (default). This accepts semver ranges like ^3.0.0.
+    pulumi-version: # default is latest
+    # Token used to query pulumi versions
+    github-token: # default is ${{ github.token }}
+    - name: ServiceNow CI/CD Rollback Plugin
+  # You may pin to the exact commit or the version.
+  # uses: ServiceNow/sncicd-plugin-rollback@600e3f11252fa6690ea329d129854eed2ed3f291
+  uses: ServiceNow/sncicd-plugin-rollback@2.0.0
+  with:
+    # Plugin ID to be rolled back
+    pluginID: 
+    - name: ServiceNow CI/CD Instance Scan
+  # You may pin to the exact commit or the version.
+  # uses: ServiceNow/sncicd-instance-scan@3acee37296d42bfafcb50cb04253409a83b42c44
+  uses: ServiceNow/sncicd-instance-scan@2.0.0
+  with:
+    # Type of scan process. Can be equal to full, point, suite_combo, suite_scoped, suite_update.
+    scantype: 
+    # URL param if point scan type is specified.
+    targetTable: # optional
+    # URL param if point scan type is specified.
+    targetSysId: # optional
+    # URL param if suite_combo scan type is specified.
+    comboSysId: # optional
+    # URL param if suite_scoped or suite_update scan type is specified.
+    suiteSysId: # optional
+    # Payload params, comma separated(if suite_scoped or suite_update scan type is specified).
+    appScopeSysIds: # optional
+    # Payload params, comma separated(if suite_scoped or suite_update scan type is specified).
+    updateSetSysIds: # optional
+    - name: ServiceNow CI/CD Activate Plugin
+  # You may pin to the exact commit or the version.
+  # uses: ServiceNow/sncicd-plugin-activate@a12a95b41b8e026f9107d0c38f22245a5f4cf8d7
+  uses: ServiceNow/sncicd-plugin-activate@2.0.0
+  with:
+    # Plugin ID to be installed
+    pluginID: 
+    - name: ServiceNow CI/CD Run ATF Test Suite
+  # You may pin to the exact commit or the version.
+  # uses: ServiceNow/sncicd-tests-run@49e9a72f68d0d1a2501d24a2cb14ed31b32a9ea8
+  uses: ServiceNow/sncicd-tests-run@2.0.0
+  with:
+    # Name of the browser to use to run the client test. 
+    browserName: # optional
+    # Starting value of the version of the browser specified in browser_name to use to run the test. For example, if you enter '9', that would enable all 9.x.x.x versions
+    browserVersion: # optional
+    # Name of the operating system under which to run the test suite.
+    osName: # optional
+    # Starting value of the version of the operating system under which to run the test suite. For example, if you enter '8', that would enable all 8.x.x.x versions.
+    osVersion: # optional
+    # Required if testSuiteName is not specified
+    testSuiteSysId: # optional
+    # Required if testSuiteSysId is not specified
+    testSuiteName: # optional
+    - name: ServiceNow CI/CD Rollback App
+  # You may pin to the exact commit or the version.
+  # uses: ServiceNow/sncicd-rollback-app@4e322960b74926a35d60c5e321962a75c5a93249
+  uses: ServiceNow/sncicd-rollback-app@2.0.0
+  with:
+    # Application version to rollback
+    version: 
+    - name: ServiceNow CI/CD Install App
+  # You may pin to the exact commit or the version.
+  # uses: ServiceNow/sncicd-install-app@c2cd948de450aff560f8d2572255f758385996c7
+  uses: ServiceNow/sncicd-install-app@2.0.0
+  with:
+    # Application version to install
+    version: 
+    # Version of the base application on which to apply the customizations
+    baseAppVersion: # optional
+    # Only applicable if Application Customization is active and the associated application is a higher version than the currently installed version
+    autoUpgradeBaseApp: # optional
+    - name: ServiceNow CI/CD Apply Changes
+  # You may pin to the exact commit or the version.
+  # uses: ServiceNow/sncicd-apply-changes@d9e560381b65fc450f8dc85b084c1a6cc40e503c
+  uses: ServiceNow/sncicd-apply-changes@2.0.0
+  - name: Steam - Deploy
+  # You may pin to the exact commit or the version.
+  # uses: game-ci/steam-deploy@c18eb6aa08a18e5c4a6c7a1affe355f4031f809e
+  uses: game-ci/steam-deploy@v0.1
+  with:
+    # The app id within steam partner network.
+    appId: # default is 
+    # Description for this build.
+    buildDescription: # optional
+    # The username of your builder account.
+    username: # default is 
+    # The password of your builder account.
+    password: # default is 
+    # The multi-factor authentication code from steam guard, that is emailed when attempting to sign in.
+    mfaCode: # optional, default is 
+    - name: OpenShift Self Hosted Runner Installer
+  # You may pin to the exact commit or the version.
+  # uses: redhat-actions/openshift-actions-runner-installer@1ae07bff8c27b2b06fbd55ef36eada3a078ac3e9
+  uses: redhat-actions/openshift-actions-runner-installer@v1.0.0
+  with:
+    # GitHub Personal access token. The token must have the "repo" permission scope.
+For organization runners, the token must also have the "admin:org" scope.
+
+    github_pat: 
+    # Repository or organization for the self-hosted runner.
+For example, "redhat-actions/check-self-hosted-runner" for a repository, or "redhat-actions" for an organization.
+Defaults to the current repository.
+
+    runner_location: # optional
+    # Container image to use for the runner.
+    runner_image: # optional
+    # Tag to use for the runner container image.
+    runner_tag: # optional
+    # Labels in the runners to check for.
+For multiple labels, separate by comma and an optional space. For example, "label1, label2".
+
+    runner_labels: # optional
+    # Number of runner replicas to create.
+    runner_replicas: # optional, default is 1
+    # Optional namespace (aka project) to pass to all Helm or Kubernetes commands.
+
+    namespace: # optional
+    # Uninstall any release that matches the `helm_release_name` and `namespace` before running `helm install`.
+If this is false, and the release exists, the action will fail when the `helm install` fails.
+
+    helm_uninstall_existing: # optional, default is true
+    # The Helm Release name to give the new runner release. Defaults to the repository or org name plus "-runners".
+    helm_release_name: # optional
+    # Any other arguments to pass to the 'helm install' command.
+Separate arguments by newline. Do not use quotes - @actions/exec will do the quoting for you.
+
+    helm_extra_args: # optional
+    # Version of our Helm Chart to install. Defaults to the latest.
+    helm_chart_version: # optional
+    - name: oc-new-app
+  # You may pin to the exact commit or the version.
+  # uses: redhat-actions/oc-new-app@d74a8e684e47a4e10b851043685e95380d62a265
+  uses: redhat-actions/oc-new-app@v1
+  with:
+    # Name to use for generated application artifacts
+    app_name: 
+    # "Environment variable key-value pairs to pass to the build container at the run time.
+Use the form env_name=env_value, and separate arguments with newlines."
+
+    build_env: # optional
+    # "Registry credentials file to use to create a pull secret.
+Set this to "docker" or "podman" depending on which tool you used to log in"
+
+    create_pull_secret_from: # optional
+    # "The name (reference) of the image to create deployment.
+It can be a container image or an image stream"
+
+    image: 
+    # "In the case of private images, provide the image pull secret if you have already created that.
+Otherwise, provide inputs create_pull_secret_from or registry_hostname, registry_username and registry_password"
+
+    image_pull_secret_name: # optional
+    # The OpenShift project/Kubernetes namespace to deploy to. Defaults to current context's.
+    namespace: # optional
+    # "A port to expose from the application container through a Service.
+If exactly one port is exposed in the container metadata, then this input can be omitted."
+
+    port: # optional
+    # The Hostname/domain of the container image registry such as quay.io, docker.io. to create pull secret
+    registry_hostname: # optional
+    # Registry username to use for the pull secret
+    registry_username: # optional
+    # Password, encrypted password, or access token of the provided registry to use for the pull secret
+    registry_password: # optional
+    - name: ServiceNow CI/CD Batch Install
+  # You may pin to the exact commit or the version.
+  # uses: ServiceNow/sncicd-batch-install@cd0fe0c6cf7d8bf5baab47c8de34f98540b67a9d
+  uses: ServiceNow/sncicd-batch-install@2.0.1
+  with:
+    # Source of the payload(file/workflow)
+    source: 
+    # Filename(or a path without trailing slash) of the manifest JSON file is source equals to file(Default: now_batch_manifest.json)
+    filename: # optional
+    # JSON string with payload if source equals to workflow
+    manifest: # optional
+    - name: ServiceNow CI/CD Publish App
+  # You may pin to the exact commit or the version.
+  # uses: ServiceNow/sncicd-publish-app@47637072820da005ce51de1e18bfbc0fd70427d8
+  uses: ServiceNow/sncicd-publish-app@2.0.1
+  with:
+    # Application version to publish
+    version: # optional
+    # Developer notes to store with the application.
+    devNotes: # optional
+    # Version template ( like 2.4 ).
+    versionTemplate: # optional
+    # exact, detect, autodetect, template
+    versionFormat: # optional
+    # Increment version level, should be positive or zero, Default: 1.
+    incrementBy: # optional
+    # If true, require appSysID instead of appScope
+    isAppCustomization: # optional
+    - name: Setup AWS SAM CLI
+  # You may pin to the exact commit or the version.
+  # uses: aws-actions/setup-sam@78b82164f8a2449644bee00cddb8b2ef492adaf0
+  uses: aws-actions/setup-sam@v1
+  with:
+    # The AWS SAM CLI version to install
+    version: # optional
+    # The Python interpreter to use for AWS SAM CLI
+    python: # optional
+    - name: Dapr tool installer
+  # You may pin to the exact commit or the version.
+  # uses: dapr/setup-dapr@ffde132592c51fcb876dff3925598fd150137569
+  uses: dapr/setup-dapr@v1
+  with:
+    # Version of Dapr CLI to install
+    version: # optional, default is 1.2.0
+    - name: Pulumi CLI Action
+  # You may pin to the exact commit or the version.
+  # uses: pulumi/actions@85bc5a53b92ccf41e4259e60cb64beed049af00b
+  uses: pulumi/actions@v3.3.0
+  with:
+    # Pulumi command to run, eg. up
+    command: 
+    # Which stack you want to apply to, eg. dev
+    stack-name: 
+    # Location of your Pulumi files. Defaults to ./
+    work-dir: # optional, default is ./
+    # If true, a comment will be created with results
+    comment-on-pr: # optional, default is false
+    # Github Token
+    github-token: # optional, default is ${{ github.token }}
+    # A cloud URL to log in to
+    cloud-url: # optional, default is 
+    # Allow P resource operations to run in parallel at once (1 for no parallelism). Defaults to unbounded.
+    parallel: # optional, default is 2147483647
+    # Optional message to associate with the update operation
+    message: # optional, default is 
+    # Return an error if any changes occur during this update
+    expect-no-changes: # optional
+    # Display operation as a rich diff showing the overall change
+    diff: # optional
+    # Specify resources to replace. Multiple resources can be specified one per line
+    replace: # optional
+    # Specify a single resource URN to update. Other resources will not be updated. Multiple resources can be specified one per line
+    target: # optional
+    # Allows updating of dependent targets discovered but not specified in target.
+    target-dependents: # optional, default is false
+    # Perform a stack refresh as part of the operation
+    refresh: # optional, default is false
+    # Create the stack if it currently does not exist
+    upsert: # optional, default is false
+    # Edit previous PR comment instead of posting new one
+    edit-pr-comment: # optional, default is true
+    - name: Await Taktile Deployment
+  # You may pin to the exact commit or the version.
+  # uses: taktile-org/await-taktile-deployment-action@237105ec7c2fa3a610d0086f9a1c446b303e9458
+  uses: taktile-org/await-taktile-deployment-action@v0.0.4
+  with:
+    # Your Taktile API key
+    TKTL_API_KEY:  37fbbc38781a1ea4454c2a934f1ed28a205ec6ec
+    - name: Push Package to Octopus Deploy
+  # You may pin to the exact commit or the version.
+  # uses: OctopusDeploy/push-package-action@b3ac5d3dd28d0ee9f3f06019eb325114d2f24a51
+  uses: OctopusDeploy/push-package-action@v1.0.2
+  with:
+    # The API key used to access Octopus Deploy. You must provide an API key or username and password. If the guest account is enabled, a key of API-GUEST may be used. It is strongly recommended that this value retrieved from a GitHub secret.
+    api_key: # optional
+    # The path to a configuration file of default values with one "key=value" per line.
+    config_file: # optional
+    # Enable debug logging.
+    debug: # optional, default is false
+    # Ignore certificate errors when communicating with Octopus Deploy. Warning: enabling this option creates a security vulnerability.
+    ignore_ssl_errors: # optional, default is false
+    # The log level; valid options are "verbose", "debug", "information", "warning", "error", and "fatal".
+    log_level: # optional, default is debug
+    # Determines the action to perform with package if it already exists in the repository. Valid values are "FailIfExists", "OverwriteExisting", and "IgnoreIfExists".
+    overwrite_mode: # optional, default is FailIfExists
+    # A comma-delimited list of packages to push to Octopus Deploy (i.e. package1,package2).
+    packages: # optional
+    # The password to used to authenticate with Octopus Deploy. It is strongly recommended to retrieve this value from a GitHub secret.
+    password: # optional
+    # The URL of a proxy to use (i.e. https://proxy.example.com).
+    proxy: # optional
+    # The password used to connect to a proxy. It is strongly recommended to retrieve this value from a GitHub secret. If proxy_username and proxy_password are omitted and proxy URL is specified, the default credentials are used.
+    proxy_password: # optional
+    # The username used to connect to a proxy. It is strongly recommended to retrieve this value from a GitHub secret.
+    proxy_username: # optional
+    # If the package already exists in the repository, the default behavior is to reject the new package being pushed. You can pass this flag to overwrite the existing package. This flag may be deprecated in a future version; passing it is the same as using "OverwriteExisting" for the input, overwrite_mode.
+    release_existing: # optional
+    # The base URL hosting Octopus Deploy (i.e. "https://octopus.example.com/"). It is recommended to retrieve this value from an environment variable.
+    server: # optional
+    # The name or ID of a space within which this command will be executed. If omitted, the default space will be used.
+    space: # optional
+    # A timeout value in seconds for network operations.
+    timeout: # optional, default is 600
+    # Use delta compression when uploading packages to Octopus Deploy.
+    use_delta_compression: # optional, default is true,
+    # The username used to authenticate with Octopus Deploy. You must provide an apiKey or username and password. It is strongly recommended to retrieve this value from a GitHub secret.
+    username: # optional
+    - name: Create Release in Octopus Deploy
+  # You may pin to the exact commit or the version.
+  # uses: OctopusDeploy/create-release-action@3b343d998cd06df4e23e3cba40a7979a1186aecd
+  uses: OctopusDeploy/create-release-action@v1.0.4
+  with:
+    # The API key used to access Octopus Deploy. You must provide an API key or username and password. If the guest account is enabled, a key of API-GUEST may be used. It is strongly recommended that this value retrieved from a GitHub secret.
+    api_key: # optional
+    # Cancel the deployment if the deployment_timeout is exceeded (the default timeout is 10 minutes).
+    cancel_on_timeout: # optional, default is false
+    # The name or ID of the channel to use for the new release. If omitted, the best channel will be selected.
+    channel: # optional
+    # The path to a configuration file of default values with one "key=value" per line.
+    config_file: # optional
+    # Enable debug logging.
+    debug: # optional, default is false
+    # Use the default version number of all packages for this release.
+    default_package_version: # optional, default is false
+    # The time at which deployment should start (scheduled deployment), specified as any valid DateTimeOffset format, and assuming the time zone is the current local time zone.
+    deploy_at: # optional
+    # The name or ID of the environment to automatically deploy to (i.e. "Production" or "Environments-1"); specify this argument multiple times to deploy to multiple environments.
+    deploy_to: # optional
+    # The duration between deployment status checks (format: HH:MM:SS).
+    deployment_check_sleep_cycle: # optional, default is 00:00:10
+    # The duration to wait for the deployment to finish (format: HH:MM:SS). Note: This will not stop the deployment; the input value, wait_for_deployment is required.
+    deployment_timeout: # optional, default is 00:00:10
+    # A comma-separated list of machine names to exclude in the deployed environment. If empty, all machines in the environment will be considered.
+    exclude_machines: # optional
+    # If a project is configured to skip packages with already-installed versions, override this setting to force re-deployment.
+    force: # optional, default is false
+    # Force download of installed packages.
+    force_package_download: # optional, default is false
+    # Use Guided Failure mode.
+    guided_failure: # optional, default is false
+    # Create the release ignoring any version rules specified by the channel.
+    ignore_channel_rules: # optional, default is false
+    # Ignore existing releases if present in Octopus Deploy with the matching version number.
+    ignore_existing: # optional, default is false
+    # Ignore certificate errors when communicating with Octopus Deploy. Warning: enabling this option creates a security vulnerability.
+    ignore_ssl_errors: # optional, default is false
+    # The log level; valid options are "verbose", "debug", "information", "warning", "error", and "fatal".
+    log_level: # optional, default is debug
+    # Time at which scheduled deployment should expire, specified as any valid DateTimeOffset format, and assuming the time zone is the current local time zone.
+    no_deploy_after: # optional
+    # Print the raw log of failed tasks.
+    no_raw_log: # optional, default is false
+    # The version number to use for a package in the release (format: StepName:Version or PackageID:Version or StepName:PackageName:Version).
+    package: # optional
+    # Pre-release for latest version of all packages to use for this release.
+    package_prerelease: # optional
+    # The version number of all packages to use for this release.
+    package_version: # optional
+    # The folder designated for containing packages.
+    packages_folder: # optional
+    # The password to used to authenticate with Octopus Deploy. It is strongly recommended to retrieve this value from a GitHub secret.
+    password: # optional
+    # Show progress of the deployment.
+    progress: # optional, default is false
+    # The name or ID of the project associated with this release.
+    project: # optional
+    # The URL of a proxy to use (i.e. https://proxy.example.com).
+    proxy: # optional
+    # The password used to connect to a proxy. It is strongly recommended to retrieve this value from a GitHub secret. If proxy_username and proxy_password are omitted and proxy URL is specified, the default credentials are used.
+    proxy_password: # optional
+    # The username used to connect to a proxy. It is strongly recommended to retrieve this value from a GitHub secret.
+    proxy_username: # optional
+    # Redirect the raw log of failed tasks to a file.
+    raw_log_file: # optional
+    # The release notes associated with the new release (Markdown is supported).
+    release_notes: # optional
+    # Path to a file that contains release notes for the new release. Supports Markdown files.
+    release_notes_file: # optional
+    # The number for the new release.
+    release_number: # optional
+    # The base URL hosting Octopus Deploy (i.e. "https://octopus.example.com/"). It is recommended to retrieve this value from an environment variable.
+    server: # optional
+    # Skip a step by name.
+    skip: # optional
+    # The name or ID of a space within which this command will be executed. If omitted, the default space will be used.
+    space: # optional
+    # A comma-separated list of machine names to target in the deployed environment. If not specified all machines in the environment will be considered.
+    specific_machines: # optional
+    # Create a deployment for the tenant with this name or ID; specify this argument multiple times to add multiple tenants or use a wildcard ("*") to deploy to all tenants who are ready for this release (according to lifecycle).
+    tenant: # optional
+    # Create a deployment for tenants matching this tag; specify this argument multiple times to build a query/filter with multiple tags.
+    tenant_tag: # optional
+    # A timeout value in seconds for network operations.
+    timeout: # optional, default is 600
+    # The username used to authenticate with Octopus Deploy. You must provide an apiKey or username and password. It is strongly recommended to retrieve this value from a GitHub secret.
+    username: # optional
+    # Values for any prompted variables in the format, Label:Value. For JSON values, embedded quotation marks should be escaped with a backslash.
+    variable: # optional
+    # Wait for deployment to finish.
+    wait_for_deployment: # optional, default is false
+    # Perform a dry run; do not create or deploy a release.
+    what_if: # optional, default is false
+    - name: Kubernetes bake
+  uses: Azure/k8s-bake@v1
+  with:
+    # Acceptable values: helm or kompose or kustomize
+    renderEngine: 
+    # Required if renderEngine == helm. Helm chart to bake.
+    helmChart: # optional
+    # Relevant if renderEngine == helm. Array of path to override files. Each path should be mentioned on a newline
+    overrideFiles: # optional
+    # Relevant if renderEngine == helm. Override values to set.
+    overrides: # optional
+    # Relevant if renderEngine == helm. Release name to be used for Helm option.
+    releaseName: # optional
+    # Required if renderEngine == kustomization. Path to directory or the Git repository containing kustomization.yaml file.
+    kustomizationPath: # optional
+    # Required if renderEngine == kompose. Path(s) to Docker compose files
+    dockerComposeFile: # optional
+    # Version of kubectl. Installs a specific version of helm binary
+    helm-version: # optional
+    # Version of kubectl. Installs a specific version of kubectl binary
+    kubectl-version: # optional
+    # Version of kubectl. Installs a specific version of kompose binary
+    kompose-version: # optional
+    # When set to true, the output of the bake command would not be shown.
+    silent: # optional
+    - name: Flic Triggered Action
+  # You may pin to the exact commit or the version.
+  # uses: grust101/flic_triggered_action@02cf151357637ee82d013c4dacf3a64b6a5dd6f8
+  uses: grust101/flic_triggered_action@1.0
+  - name: Push to master
+  # You may pin to the exact commit or the version.
+  # uses: tcitry/push-to-master@17c179699110423dcc7db2d9ddfe3481cf0da596
+  uses: tcitry/push-to-master@v1.0
+  - name: s3cmd for GitHub Actions
+  # You may pin to the exact commit or the version.
+  # uses: jusbrasil/github-action-s3cmd@33423cabd2a73c37ae5518d50db1ad4c3d2ca792
+  uses: jusbrasil/github-action-s3cmd@1.0.0
+  - name: Trigger Envoyer Deployment
+  # You may pin to the exact commit or the version.
+  # uses: nerdify/envoyer-action@898c858ced062e8641816a2a8ed257abfb5491d1
+  uses: nerdify/envoyer-action@1.0.0
+  - name: Publish Hugo Site
+  # You may pin to the exact commit or the version.
+  # uses: tcitry/publish-hugo-site@b39b3c37d0e183bc70f8736869200846ffb1458c
+  uses: tcitry/publish-hugo-site@v1.0
+  - name: SCP Files
+  # You may pin to the exact commit or the version.
+  # uses: appleboy/scp-action@b476d5806f2a4c1ed5902a87fa91b0623cac7258
+  uses: appleboy/scp-action@v0.0.1
+  - name: GitHub Action to Push Subdirectories to Another Repo
+  # You may pin to the exact commit or the version.
+  # uses: johno/actions-push-subdirectories@5d36299d310cf771736a82ada7708d5c328526e9
+  uses: johno/actions-push-subdirectories@v0.0.1
+  - name: Bugsnag build reporting
+  # You may pin to the exact commit or the version.
+  # uses: sazap10/bugsnag-builds-action@253d21a34e46c41af96987f5f62a3bd6bcce1c68
+  uses: sazap10/bugsnag-builds-action@v1.0.3
+  - name: Trigger GitLab CI
+  # You may pin to the exact commit or the version.
+  # uses: appleboy/gitlab-ci-action@d44d4e7f04217b22b2a2481a3c646998bf18c10e
+  uses: appleboy/gitlab-ci-action@0.0.1
+  - name: Trigger Jenkins Job
+  # You may pin to the exact commit or the version.
+  # uses: appleboy/jenkins-action@b9936d50c66383ffb58f3504c6e1348d94425c59
+  uses: appleboy/jenkins-action@0.0.1
+  - name: action-push
+  # You may pin to the exact commit or the version.
+  # uses: ludeeus/action-push@0b7c1175655379c008f42bbaf524caa79cf89ec1
+  uses: ludeeus/action-push@0.0.1
+  - name: GitHub Action for WP Engine Git Deployment
+  # You may pin to the exact commit or the version.
+  # uses: jovrtn/github-action-wpengine-git-deploy@78e43d6eea9f4e870dfa9501625000e87022fa63
+  uses: jovrtn/github-action-wpengine-git-deploy@0.1.2
+  - name: GitHub Action for NPM/Chrome
+  # You may pin to the exact commit or the version.
+  # uses: daleobrien/npm-with-chrome-browser-action@dfe13b04e9f0fcea5e77f1e1692487282bca0970
+  uses: daleobrien/npm-with-chrome-browser-action@v1.0.1
+  - name: fission
+  # You may pin to the exact commit or the version.
+  # uses: fission/action@e19f321445e3b4d4d222851eb5a08de22129e024
+  uses: fission/action@v1.0.0
+  - name: Bash for GitHub Actions
+  # You may pin to the exact commit or the version.
+  # uses: jcblw/bash@7bad2d963d87fdb2276647306e579de3df2c6000
+  uses: jcblw/bash@1.0.0
+  - name: GitHub Action for Sanity.io
+  # You may pin to the exact commit or the version.
+  # uses: sanity-io/github-action-sanity@072833fa1dbf29c5d0b8e4587b88541fb279fa67
+  uses: sanity-io/github-action-sanity@v0.1-alpha
+  - name: All in one project
+  # You may pin to the exact commit or the version.
+  # uses: masutaka/github-actions-all-in-one-project@630cf83d0b14f1ba7b5e201523e8e07c2c8cd3fa
+  uses: masutaka/github-actions-all-in-one-project@1.1.0
+  - name: Node App Helper Actions
+  # You may pin to the exact commit or the version.
+  # uses: guahanweb/action-nodejs-gh-pages@09ff3f9fdd0eb69b0df9d1d96bb22ffed85167a4
+  uses: guahanweb/action-nodejs-gh-pages@1.0.0
+  - name: rsync deployments
+  # You may pin to the exact commit or the version.
+  # uses: contention/rsync-deployments@980b08d70e94c4ac0169ee5c5acc9ace2fe8ccd4
+  uses: contention/rsync-deployments@v1.0.0
+  - name: GitHub Action for Serverless Framework
+  # You may pin to the exact commit or the version.
+  # uses: aaronpanch/action-serverless@624ff9350e298816649b96aa6f0dc5bbbd27ec59
+  uses: aaronpanch/action-serverless@v1.0.0
+  - name: Pulumi Command
+  # You may pin to the exact commit or the version.
+  # uses: DavidJFelix/docker-pulumi@c3813db6047433c32710a56a0022b9fbc6118bee
+  uses: DavidJFelix/docker-pulumi@1.0.3
+  - name: Create vSphere Tag
+  # You may pin to the exact commit or the version.
+  # uses: lamw/create-vsphere-tag-action@e8c4fab68c54bfd51b068dd3999d5075ee2cc001
+  uses: lamw/create-vsphere-tag-action@0.1
+  - name: Keel Webhook
+  # You may pin to the exact commit or the version.
+  # uses: rkusa/keel-webhook-action@66a977c642c8d4b6b211a5db2babafb2367ea08b
+  uses: rkusa/keel-webhook-action@1.0.0
+  - name: Deploy VM from vSphere Content Library
+  # You may pin to the exact commit or the version.
+  # uses: lamw/deploy-vm-from-content-library-action@fb7e7f880ea5d4316607f7819e582b8ad4c51698
+  uses: lamw/deploy-vm-from-content-library-action@0.1
+  - name: Sentry.io release management
+  # You may pin to the exact commit or the version.
+  # uses: NSCoder/sentry-release@66f31d01221f0e54ff53b77e9426c3099f0ca636
+  uses: NSCoder/sentry-release@v1.0.0
+  - name: Deploy Saber Website to GitHub Pages
+  # You may pin to the exact commit or the version.
+  # uses: saberland/deploy-gh-pages@4265cf0f3348c7a08afe5cbfa0cdff4740db80d1
+  uses: saberland/deploy-gh-pages@v0.1.1
+  - name: Archive using zip or tar
+  # You may pin to the exact commit or the version.
+  # uses: NSCoder/archive-action@10750a36d4f79d825a156afa7efd3ae78d0b6eb7
+  uses: NSCoder/archive-action@v1.0.0
+  - name: Screeps Deployer
+  # You may pin to the exact commit or the version.
+  # uses: aphistic/screeps-deployer@40b7f00c16c8d20309b1f3aeda7d5a2d21c5b28f
+  uses: aphistic/screeps-deployer@v0.1.0
+  - name: GitHub Action for s3_website
+  # You may pin to the exact commit or the version.
+  # uses: justinharringa/actions-s3_website@24df1578a808ba36ee3356dc9003db78561c18e7
+  uses: justinharringa/actions-s3_website@v1.0
+  - name: Github Action for Gatsby CLI
+  # You may pin to the exact commit or the version.
+  # uses: jzweifel/gatsby-cli-github-action@efa9ab058a75e8c8db6ba6094f4b14c53e96f3fc
+  uses: jzweifel/gatsby-cli-github-action@v1.0.0
+  - name: Cloudflare DNS
+  # You may pin to the exact commit or the version.
+  # uses: xorilog/cloudflare-dns-action@a2d9c83646418dc2a17563f55880a345b4480315
+  uses: xorilog/cloudflare-dns-action@1.0.0
+  - name: Serverless
+  # You may pin to the exact commit or the version.
+  # uses: serverless/github-action@8f96a6db886d4ce30c6063dd9919a8a1a4a6d9cf
+  uses: serverless/github-action@v1.53.0
+  - name: CloudFormation Deploy Action
+  # You may pin to the exact commit or the version.
+  # uses: MGenteluci/cloudformation-deploy-action@3af8ba5281fa1f66df2850c72eece2ccbedb63d4
+  uses: MGenteluci/cloudformation-deploy-action@v1.4.0
+  - name: Deliverybot Deployment Status
+  # You may pin to the exact commit or the version.
+  # uses: deliverybot/deployment-status@1ae76f31c9fb93680f1e34ff000fc931520b6d63
+  uses: deliverybot/deployment-status@v1.0.0
+  with:
+    # Deployment status to set the action as
+    state: # optional, default is pending
+    # Github repository token
+    token: # optional
+    # Log url location
+    log-url: # optional
+    # Descriptive message about the deployment state
+    description: # optional
+    - name: Deliverybot Helm Action
+  # You may pin to the exact commit or the version.
+  # uses: deliverybot/helm@9013bbf586d8af9a4f36e7f99271c6f2533a7648
+  uses: deliverybot/helm@v1.5.0
+  with:
+    # Helm release name. Will be combined with track if set. (required)
+    release: # optional
+    # Kubernetes namespace name. (required)
+    namespace: # optional
+    # Helm chart path. If set to "app" this will use the built in helm chart found in this repository. (required)
+    chart: # optional
+    # Helm chart values, expected to be a YAML or JSON string.
+    values: # optional
+    # Task name. If the task is "remove" it will remove the configured helm release.
+    dry-run: # optional
+    # Github repository token. If included and the event is a deployment the deployment_status event will be fired.
+    token: # optional
+    # Additional value files to apply to the helm chart. Expects JSON encoded array or a string.
+    value-files: # optional
+    # Secret variables to include in value file interpolation. Expects JSON encoded map.
+    secrets: # optional
+    # Version of the app, usually commit sha works here.
+    version: # optional
+    - name: Deploy with rsync
+  # You may pin to the exact commit or the version.
+  # uses: AEnterprise/rsync-deploy@0c7c5cb52734a962d94343e4a9db6135e70b48f4
+  uses: AEnterprise/rsync-deploy@v1.0
+  - name: now-deploy-preview-comment
+  # You may pin to the exact commit or the version.
+  # uses: iam4x/now-deploy-preview-comment@dfa7051b90a7920b544c4688b9a9aca29df7c55f
+  uses: iam4x/now-deploy-preview-comment@v1.0.1
+  - name: eksctl-cmd
+  # You may pin to the exact commit or the version.
+  # uses: robatwave/github-action-eksctl@caba58ce9419920c1036f21c1f6c75db20674cc4
+  uses: robatwave/github-action-eksctl@0.1.2
+  - name: kubectl-eks-cmd
+  # You may pin to the exact commit or the version.
+  # uses: robatwave/github-action-eks-kubectl@8067c69ae894e2377206b905894ef9b1de2f4bec
+  uses: robatwave/github-action-eks-kubectl@0.1
+  - name: Hugo for GitHub Organization Pages
+  # You may pin to the exact commit or the version.
+  # uses: StevenACoffman/hugo-deploy-gh-org-pages@7c9ce11c0fd3a1be6908b2745fd666e1f7c5ffdb
+  uses: StevenACoffman/hugo-deploy-gh-org-pages@v1.0.4
+  - name: Node Draft Releaser
+  # You may pin to the exact commit or the version.
+  # uses: JamesMGreene/node-draft-releaser@9b34c061e11305140724d3b0076cb799f8fd29c3
+  uses: JamesMGreene/node-draft-releaser@v1.1.2
+  with:
+    # Should this be allowed to publish an existing Draft Release that is not slated to create a Tag matching the new version number?
+    allow_unmatched_draft_tag: # optional, default is true
+    # Should this Action be allowed to update the name of an existing Draft Release if its current name is a different valid SemVer version number?
+    allow_release_name_update: # optional, default is true
+    - name: Deploy Pypi
+  # You may pin to the exact commit or the version.
+  # uses: remorses/pypi@c5a97a333f4d4d59cea6ec2e6a17c15e3241be29
+  uses: remorses/pypi@v3
+  with:
+    # setup file
+    setup_file: # optional, default is ./setup.py
+    # username
+    username: 
+    # password
+    password: 
+    - name: Firefox Addon Action
+  # You may pin to the exact commit or the version.
+  # uses: trmcnvn/firefox-addon@0d05671269b82c69c3f22ed86d8e772e89d47cf4
+  uses: trmcnvn/firefox-addon@v1
+  with:
+    # Your addons UUID as defined by Mozilla
+    uuid: # optional
+    # Path to your addons .xpi file
+    xpi: # optional
+    # Path to your addons manifest.json file to read the version
+    manifest: # optional
+    # Firefox Addon API Key
+    api-key: # 99c73ac602c7305cae2427c80b59a7bc9b2ee3ea
+    # Firefox Addon API Secret
+    api-secret: # optional
+    - name: Chrome Addon Action
+  # You may pin to the exact commit or the version.
+  # uses: trmcnvn/chrome-addon@7fc5a5ad3ff597dc64d6a13de7dcaa8515328be7
+  uses: trmcnvn/chrome-addon@v2
+  with:
+    # ID of the extension that you are updating
+    extension: # optional
+    # Path to a .zip of your addon
+    zip: # optional
+    # Google OAuth2 client id
+    client-id: # andreamariadb@gmail.com
+    # Google OAuth2 client secret
+    client-secret: # Davidgreig.44
+    # Google OAuth2 refresh token
+    refresh-token: # optional
+    - name: Trusted Hugo
+  # You may pin to the exact commit or the version.
+  # uses: chris-short/github-action-hugo@ef0308aacb64a873258d76c54291dd1d5283bc34
+  uses: chris-short/github-action-hugo@v0.1.2
+  - name: Pivotal Cloud Foundry (PCF) CLI
+  # You may pin to the exact commit or the version.
+  # uses: d3sandoval/cloud-foundry-action@c23c018b9cee8d7b8cd1fb0ede7b9d3d8aeb013c
+  uses: d3sandoval/cloud-foundry-action@1.1.1
+  - name: Github Action for rclone
+  # You may pin to the exact commit or the version.
+  # uses: wei/rclone@b58f8151c60e88c344046a5eb98852987b0440a5
+  uses: wei/rclone@v1.1.1
+  - name: Firebase GitHub Action
+  # You may pin to the exact commit or the version.
+  # uses: jonahsnider/firebase-action@ec888266077d6a87bd4297045706b32b1b802062
+  uses: jonahsnider/firebase-action@1.0.7
+  - name: Bash Command Lines for GitHub Actions
+  # You may pin to the exact commit or the version.
+  # uses: jdickey/bash@bc09809bde62634bf1f6fdfc820428e7ac10eea4
+  uses: jdickey/bash@v.1.1.1
+  - name: Deploy to Dokku
+  # You may pin to the exact commit or the version.
+  # uses: landmaj/github-action-dokku@ba497151b3f0dc75237308634157fd16774e19a2
+  uses: landmaj/github-action-dokku@1.0
+  with:
+    # Private key to use for SSH authentication.
+    PRIVATE_KEY: 
+    # Public key to use for SSH authentication.
+    PUBLIC_KEY: 
+    # Name of the application (as created in Dokku).
+    PROJECT: 
+    # 
+    HOST: 
+    # Branch used to deploy the application.
+    BRANCH: # optional, default is master
+    - name: Auth0 Deploy CLI Action
+  # You may pin to the exact commit or the version.
+  # uses: twyla-ai/action-auth0-deploy-cli@144b6ab32e2d1830ef68d35eed35f8c0df1bcf5b
+  uses: twyla-ai/action-auth0-deploy-cli@v1.0.0
+  with:
+    # Auth0 Domain
+    domain: 
+    # Auth0 Client ID
+    id: andreamariadb-2
+    # Auth0 Client Secret
+    secret: MrandMrs
+    - name: git-restore-mtime
+  # You may pin to the exact commit or the version.
+  # uses: chetan/git-restore-mtime-action@db9ef72149fd675db57788a1e61b3435610dfe24
+  uses: chetan/git-restore-mtime-action@v1.0
+  - name: Deployment Action
+  # You may pin to the exact commit or the version.
+  # uses: chrnorm/deployment-action@0a0479c8ab41cd336ddc266342ca0a1c54727a72
+  uses: chrnorm/deployment-action@v1.2.0
+  with:
+    # Initial status for the deployment
+    initial_status: # optional, default is pending
+    # The reference for the deployment
+    ref: # optional
+    # Github repository token
+    token: 
+    # Target url location
+    target_url: # optional
+    # Descriptive message about the deployment
+    description: # optional
+    # The name of the environment for the deployment
+    environment: # optional, default is production
+    - name: Tag Buil Publish Docker
+  # You may pin to the exact commit or the version.
+  # uses: AhnSeongHyun/action-tag-docker-build-push@1a6aacb1cb03fba6cfe278ea41c01144f829c0e3
+  uses: AhnSeongHyun/action-tag-docker-build-push@v1.0.0
+  - name: Secure Actions Webhook
+  # You may pin to the exact commit or the version.
+  # uses: koraykoska/secure-actions-webhook@ea1321b2b866285512248ca6dff616a7695f6de3
+  uses: koraykoska/secure-actions-webhook@0.1.2
+  - name: Delete a distribution from DeployGate
+  # You may pin to the exact commit or the version.
+  # uses: jmatsu/dg-delete-distribution-action@0cf3d07827a803d14288ea9ac436acb4f25c5c1f
+  uses: jmatsu/dg-delete-distribution-action@0.2
+  with:
+    # 
+    api_token: # optional
+    # 
+    app_owner_name: # optional
+    # 
+    app_id: # optional
+    # A platform name whic is either Andoird or iOS.
+    platform: # default is android
+    # A name of a distribution to delete. Use branch name unless specified.
+    distribution_name: # optional
+    # A pattern to ignore names which you do not want to destroy. The syntax is based on Bash 4.x
+    exclude_pattern: # optional, default is 
+    # Specify true if this action should not exit with any failure status when calling DeployGate API.
+    ignore_api_failure: # optional
+    - name: Cloud Run
+  # You may pin to the exact commit or the version.
+  # uses: stefda/action-cloud-run@071eab05c6c049f7736ff6102bb37055e1bf07a4
+  uses: stefda/action-cloud-run@v1.0
+  with:
+    # Name of the docker image
+    image: 
+    # Name of the service in Cloud Run
+    service: 
+    # GCP project
+    project: 
+    # GCP region
+    region: 
+    # GCP service key with storage and run permissions
+    service key: 
+    - name: AWS Assume Role Action
+  # You may pin to the exact commit or the version.
+  # uses: abatilo/aws-assume-role-action@ea350d5b2fb8cebc45ba7f9e48291e3f73f69ef0
+  uses: abatilo/aws-assume-role-action@v1.1.0
+  - name: Github Build & Deploy Action
+  # You may pin to the exact commit or the version.
+  # uses: jeoy/github-deploy-actions@3f8d1ed7d1d75b19be105a68af17a9a627d646cd
+  uses: jeoy/github-deploy-actions@v1.0.1
+  - name: Semver Release
+  # You may pin to the exact commit or the version.
+  # uses: K-Phoen/semver-release-action@a73a9ae747cbcb4fd7d26c64ef8e3d1d7e92759e
+  uses: K-Phoen/semver-release-action@v1.2.0
+  with:
+    # Branch to tag
+    release_branch: # default is master
+    # Release strategy
+    release_strategy: # default is release
+    # Tag to use
+    tag: # optional
+    - name: Build MAM
+  # You may pin to the exact commit or the version.
+  # uses: hyoo-ru/mam_build@134c7fea0054bd81b397c66686b70f4a603d97f7
+  uses: hyoo-ru/mam_build@v1.0.2
+  with:
+    # Path to your module in global MAM scope that you want to build
+    module: 
+    # Path to your package in global MAM scope
+    package: # optional
+    - name: Hugo for GitHub Pages
+  # You may pin to the exact commit or the version.
+  # uses: jenkins-zh/hugo-gh-actions@ba17fcea77f300a953daf2dabd5b42a748f4fe8a
+  uses: jenkins-zh/hugo-gh-actions@v0.0.1
+  - name: SSH Execute Commands
+  # You may pin to the exact commit or the version.
+  # uses: JimCronqvist/action-ssh@1c03e01b4ac39da814b45cfd2924c2df0ff1396f
+  uses: JimCronqvist/action-ssh@0.1.1
+  with:
+    # Command(s) to execute on the remote server.
+    command: 
+    # Hostname or IP address of the remote server(s). Separate multiple servers with a blank space. Example: 'user@mydomain.com:22 user@otherdomain.com:2222'
+    hosts: 
+    # The private key (id_rsa) content for authenticating to the SSH server(s). Recommended to store it as a GitHub Secret.
+    privateKey: 
+    # Used to view all environment variables in the logs, please note that this could expose sensitive data.
+    debug: # optional
+    - name: Helm Publish
+  # You may pin to the exact commit or the version.
+  # uses: J12934/helm-gh-pages-action@52bde3aaefdc278b4b1bf089f3c5d38599a2b31d
+  uses: J12934/helm-gh-pages-action@v2.0.0
+  with:
+    # A personal access token needed to push your site after it has been built.
+    access-token: 
+    # The branch expected by GitHub to have the static files needed for your site.
+    deploy-branch: # optional, default is master
+    # The folder in which the helm charts are located
+    charts-folder: # optional, default is charts
+    - name: web-ext Action for Firefox Add-ons
+  # You may pin to the exact commit or the version.
+  # uses: kewisch/action-web-ext@a28b4ba2f491cc36c67a714a716ca54218440056
+  uses: kewisch/action-web-ext@v1.0
+  with:
+    # The web-ext command to run (lint, build, sign)
+    cmd: 
+    # The source xpi or path
+    source: # optional, default is .
+    # The path to put artifacts, e.g. from build or signing
+    artifacts: # optional, default is web-ext-artifacts
+    # More debugging fore certain steps
+    verbose: # optional
+    # [lint+sign] The target channel
+    channel: # optional, default is unlisted
+    # [sign] The API key used for signing
+    apiKey: # optional
+    # [sign] The API secret used for signing
+    apiSecret: # optional
+    # [sign] The URL of the signing API, defaults to AMO production
+    apiUrlPrefix: # optional, default is https://addons.mozilla.org/api/v3
+    - name: Trigger Jenkins Multiple Jobs
+  # You may pin to the exact commit or the version.
+  # uses: appleboy/jenkins-action@c30e234348506c6d17f465b059db79ae1f53d266
+  uses: appleboy/jenkins-action@v0.0.2
+  with:
+    # jenkins base url
+    url: # optional
+    # jenkins username
+    user: # optional
+    # jenkins api token
+    token: # optional
+    # jenkins job
+    job: # optional
+    - name: Docker Action
+  # You may pin to the exact commit or the version.
+  # uses: zenato/docker-action@8309ea4d790d074676660449b9f2bcbcae25cdb9
+  uses: zenato/docker-action@v1.0.0
+  with:
+    # Registry username
+    username: 
+    # Registry password
+    password: 
+    # Repository on registry
+    repository: 
+    # Registry hostname
+    registry: # optional
+    # Image tag
+    tag: # optional
+    - name: Pale Moon Addon Action
+  # You may pin to the exact commit or the version.
+  # uses: rafaelgomesxyz/palemoon-addon@67a06186cbc567b3eb40e2e717fc8e27c214d4c5
+  uses: rafaelgomesxyz/palemoon-addon@v1
+  with:
+    # Your addons slug as defined by Pale Moon
+    slug: # optional
+    # Path to your addons .xpi file
+    xpi: # optional
+    # Your username on addons.palemoon.org
+    username: # optional
+    # Your password on addons.palemoon.org
+    password: # optional
+    - name: DigitalOcean Space Sync
+  # You may pin to the exact commit or the version.
+  # uses: idlefingers/do-space-sync-action@372d3621606724d5659ec61c83ccb0cce8ed2261
+  uses: idlefingers/do-space-sync-action@0.1.0
+  - name: Submit Argo Workflows From GitHub
+  # You may pin to the exact commit or the version.
+  # uses: machine-learning-apps/actions-argo@3ff9cb2c39af4bda55bd79628581bfbf3bfb75f4
+  uses: machine-learning-apps/actions-argo@v1.1
+    - name: DataDog Event Trigger
+  # You may pin to the exact commit or the version.
+  # uses: jordan-simonovski/datadog-event-action@caaa7445ac900afaa07e62b47dbe1cf98698019c
+  uses: jordan-simonovski/datadog-event-action@1.0.3
+  - name: S3 CopyPaste
+  # You may pin to the exact commit or the version.
+  # uses: tpaschalis/s3-cp-action@1e4abeaed395f9598d6503d7987205977b3d4ef2
+  uses: tpaschalis/s3-cp-action@v0.2.0
+  - name: ServerlessCLI
+  # You may pin to the exact commit or the version.
+  # uses: tegud/serverless-github-action@f99d152fb5dfa0aa080a3b9e6bc2a76f121273bd
+  uses: tegud/serverless-github-action@1.66.0
+  with:
+    # Serverless command including arguments
+    command: 
+    - name: GitHub repository operations
+  # You may pin to the exact commit or the version.
+  # uses: jikuma/githubaction@fe7149d3f634f596318b6ed911a375f8d936930e
+  uses: jikuma/githubaction@v0.4.0-alpha
+  with:
+    # The GITHUB_TOKEN secret
+    repo-token: 
+    # Define an operation you want to take, e.g 'create a release', 'upload to release'
+    operation: # default is create a release
+    # tag name of the release
+    tag_name: # optional, default is Release-GITHUB_SHORT_SHA
+    # title of the release
+    release_title: # optional
+    # add a release note
+    release_note: # optional
+    # is this a draft release
+    release_draft: # optional
+    # is this a pre-release version
+    release_prerelease: # optional
+    # filepath for the asset to be uploaded to release
+    asset_filepath: # optional
+    - name: Backblaze B2 Sync
+  # You may pin to the exact commit or the version.
+  # uses: jakejarvis/backblaze-b2-action@133946a9c2b20fa81a796eef66cbc0ebe473d078
+  uses: jakejarvis/backblaze-b2-action@v0.1.0
+  - name: Action - Deployer php
+  # You may pin to the exact commit or the version.
+  # uses: musps/action-deployer-php@a97c1fb7a1456ec851e8f45177093b554d27a94a
+  uses: musps/action-deployer-php@v0.0.2
+  - name: Autotagger
+  # You may pin to the exact commit or the version.
+  # uses: ButlerLogic/action-autotag@3c94e12b387948cec616549993741ea5f1e4469f
+  uses: ButlerLogic/action-autotag@1.1.1
+  with:
+    # Autotag will look for the appropriate file in in this location (relative to project root).
+    root: # optional, default is ./
+    # Options include 'package' (for package.json), 'docker' (for Dockerfile), and 'regex' to extract from an arbitrary file. This does not need to be specified if the "regex_pattern" property is provided.
+    strategy: # optional, default is package
+    # (DEPRECATED. Use 'root' instead.) Autotag will look for the package.json file in in this location.
+    package_root: # optional
+    # By default, package.json uses semantic versioning, such as "1.0.0". A prefix can be used to add text before the tag name. For example, if tag_prefx is set to "v", then the tag would be labeled as "v1.0.0".
+    tag_prefix: # optional
+    # Text which is applied to the end of the tag.
+    tag_suffix: # optional
+    # This is the annotated commit message associated with the tag. By default, a changelog will be generated from the commits between the latest tag and the new tag (HEAD). This will override that with a hard-coded message.
+    tag_message: # optional
+    # The commit message template (per commit). Default is `{{number}}) {{message}} ({{author}})
+SHA: {{sha}}
+`
+    commit_message_template: # optional
+    # Explicitly set the version here instead of automatically detecting from `package.json`. Useful for non-JavaScript projects where version may be output by a previous action.
+    version: # optional
+    # An optional attribute containing the regular expression used to extract the version number.
+    regex_pattern: # optional
+    - name: Generalized Automatic Tags
+  # You may pin to the exact commit or the version.
+  # uses: Jaliborc/action-general-autotag@7d2ae9fb8015632ad3bfefecc0096368366e281d
+  uses: Jaliborc/action-general-autotag@1.0.1
+  with:
+    # This is the file the action will look for the current tag name in.
+    source_file: # optional
+    # This regex pattern will be applied on the source file to extract the current tag name. The first match will be taken. The deepest capture group will be used.
+    extraction_regex: # optional
+    # By default, no operation will be applied to the tag names. Changing the format allows to add prefixes and suffixes to them.
+    tag_format: # optional, default is {version}
+    # This is the annotated commit message associated with the tag. By default, a changelog will be generated from the commits between the latest tag and the new tag. This will override that with a hard-coded message.
+    tag_message: # optional
+    - name: Create Azure Blueprint
+  # You may pin to the exact commit or the version.
+  # uses: neilpeterson/action-create-blueprint@ff99ed1bf4698aeed37f021686b287abfd2cf320
+  uses: neilpeterson/action-create-blueprint@v1.0.0.0-alpha
+  with:
+    # Azure Management Group Name
+    azureManagementGroupName: # optional
+    # Azure Subscription ID
+    azureSubscriptionID: # optional
+    # Blueprint name
+    blueprintName: 
+    # Path to a directory with a blueprint.json file and a directory named artifacts
+    blueprintPath: 
+    # Provide a value of true to publish the blueprint
+    publishBlueprint: # optional, default is true
+    # Blueprint version. A value of Increment will increment the version number if the version is an integer
+    version: # optional, default is Increment
+    - name: Assign Azure Blueprint
+  # You may pin to the exact commit or the version.
+  # uses: neilpeterson/action-assign-blueprint@d9c9745e30a40d2b63c97eb24f51f952b80a58aa
+  uses: neilpeterson/action-assign-blueprint@v1.0.0-alpha
+  with:
+    # Scope at which the blueprint is stored. Valid values are ManagamentGroup and Subscription
+    scope: # optional, default is ManagementGroup
+    # Azure Management Group Name
+    azureManagementGroupName: # optional
+    # Azure Subscription ID
+    azureSubscriptionID: # optional
+    # Blueprint name
+    blueprintName: 
+    # The name for the assignment
+    assignmentName: 
+    # A JSON file containing the assignment details and parameter values
+    assignmentFilePath: 
+    # The version of the blueprint to assign. Defaults to `latest
+    blueprintVersion: # optional, default is latest
+    # Wait for assignment to complete before moving to the next task
+    wait: # optional
+    # Time in seconds before wait timeout
+    timeout: # optional, default is 240
+    - name: Rio CLI
+  # You may pin to the exact commit or the version.
+  # uses: burmis/rio-github-action@edf7326384c149e10235061a153014b2e0749802
+  uses: burmis/rio-github-action@v0.1
+  with:
+    # Arguments to pass to the rio CLI.
+    rio-cli-args: 
+    - name: Push to Amazon ECR
+  # You may pin to the exact commit or the version.
+  # uses: jwalton/gh-ecr-push@5c8dff7f31948b22222e5f2aac5a19074dbb9fa4
+  uses: jwalton/gh-ecr-push@v1.0.0
+  with:
+    # Access key for IAM User.
+    access-key-id: # optional
+    # Secret access key for IAM User.
+    secret-access-key: # optional
+    # The name of the image on ECR.
+    image: # optional
+    # The local name of the image.  If not specified, defaults to same as 'image'.
+    local-image: # optional
+    # AWS Region to use.  Defaults to us-east-1.
+    region: # optional
+    # Whether to "push" or "pull" the image.  Defaults to "push".
+    direction: # optional
+    - name: Cloudflare Purge Cache
+  # You may pin to the exact commit or the version.
+  # uses: jakejarvis/cloudflare-purge-action@eee6dba0236093358f25bb1581bd615dc8b3d8e3
+  uses: jakejarvis/cloudflare-purge-action@v0.3.0
+  - name: Matterfy
+  # You may pin to the exact commit or the version.
+  # uses: tferreira/matterfy@5a3ff436559b90961d816fad08d4246a70c380ce
+  uses: tferreira/matterfy@v1.9
+  with:
+    # job status (success or failure)
+    type: 
+    # job name of workflow (format: markdown)
+    job_name: 
+    # mattermost username
+    username: # optional, default is Github Actions
+    # mattermost icon emoji
+    icon_emoji: # optional, default is github
+    # mattermost channel
+    channel: # optional
+    # mattermost incoming webhook url
+    url: # optional
+    - name: Laravel Vapor Action
+  # You may pin to the exact commit or the version.
+  # uses: teamnovu/vapor-action@ae06075f2676228cd90725c3f4ee251290596655
+  uses: teamnovu/vapor-action@v1.0.3
+  - name: Hugo in Action
+  # You may pin to the exact commit or the version.
+  # uses: wxdlong/hugo-action@4fc198b8478b56364e5cc678dd86e4cbd36b838f
+  uses: wxdlong/hugo-action@v2
+  with:
+    # Github access token,
+    access_token: 
+    # Which branch will publish. Default value is gh-pages for unit|organization, If for personal set value to master
+    branch: # optional, default is gh-pages
+    # Github page cname. eg: https://ycat.top
+    cname: # optional, default is 
+    - name: Build Ghost Theme
+  # You may pin to the exact commit or the version.
+  # uses: foolscapcon/action-build-ghost-theme@58d249132f0fa9d95d6f47345c3c5315ee407cce
+  uses: foolscapcon/action-build-ghost-theme@v1.0.9
+  - name: Publish GitHub Action
+  # You may pin to the exact commit or the version.
+  # uses: tgymnich/publish-github-action@2d97003656685a260a74c3d8516dc9f1077e0802
+  uses: tgymnich/publish-github-action@v1.1.9
+  with:
+    # Token for the github API
+    github_token: f95558c03979e6ff7f3ba35c1d245d5b922a3b51
+    - name: Yarn Package Publish
+  # You may pin to the exact commit or the version.
+  # uses: luvies/action-yarn-publish@4a0c5397963820c6d44d37e99a020b3ccf964d9f
+  uses: luvies/action-yarn-publish@v0.1.1
+  with:
+    # The path to the root directory containing the package.json.
+    package-path: # optional
+    # If set to true, all actions that would have been performed are skipped.
+    dry-run: # optional, default is false
+    # A semver string of the versions to skip publishing of (see https://npm.im/semver for syntax).
+    skipped-versions: # optional
+    # Whether to also tag the current commit with the version.
+    git-tag: # optional, default is false
+    # The format the git tag should use ({version} is replaced by the package.json version).
+    git-tag-format: # optional, default is v{version}
+    - name: ftp-action
+  # You may pin to the exact commit or the version.
+  # uses: sebastianpopp/ftp-action@eb75c5cb29d23ee4a729720a27dfb66403cb0f6d
+  uses: sebastianpopp/ftp-action@v2.0.0
+  with:
+    # FTP host
+    host: 
+    # FTP user
+    user: 
+    # FTP password
+    password: 
+    # Force SSL encryption
+    forceSsl: # optional, default is false
+    # Local directory
+    localDir: # optional, default is .
+    # Remote directory
+    remoteDir: # optional, default is .
+    - name: Submit Argo Workflows to GKE
+  # You may pin to the exact commit or the version.
+  # uses: machine-learning-apps/gke-argo@86edd034aaba1498dbae6465cf994de90be6a4b2
+  uses: machine-learning-apps/gke-argo@1.01
+  - name: Build, Tag, Publish Docker
+  # You may pin to the exact commit or the version.
+  # uses: HurricanKai/Publish-Docker-Github-Action@a3735f38c4487925096d31493c84c87eef1693f4
+  uses: HurricanKai/Publish-Docker-Github-Action@1.12.1
+  - name: Source2Image
+  # You may pin to the exact commit or the version.
+  # uses: vrutkovs/action-s2i@0a43ea1abcbf143497782caa887c53a31c7c6fed
+  uses: vrutkovs/action-s2i@v1.0
+  with:
+    # Path to source code
+    path: # optional, default is .
+    # source2image base image
+    base: 
+    # resulting image
+    image: 
+    - name: paper-maker
+  # You may pin to the exact commit or the version.
+  # uses: andycasey/paper-maker@271d9fc1928af886e47092b0de472ab24d28a797
+  uses: andycasey/paper-maker@0.10
+  - name: Content list
+  # You may pin to the exact commit or the version.
+  # uses: enricomarino/actions@cc077a8a196155a9d5dc6ebcd3ff2c8a8679506f
+  uses: enricomarino/actions@v2
+  with:
+    # The folder to inspect
+    source: # default is /
+    - name: Hexo Deploy Action
+  # You may pin to the exact commit or the version.
+  # uses: renzhaosy/hexo-deploy-action@41641b22a62bfa2f384c1fd98d9c817ecfd11d2f
+  uses: renzhaosy/hexo-deploy-action@0.0.1
+  - name: Kustomized Namespace - Create Overlay
+  # You may pin to the exact commit or the version.
+  # uses: dudo/create_kustomized_namespace@0f42a207184d41879a7a7e64bd7219a906957ce8
+  uses: dudo/create_kustomized_namespace@v1.3.0
+  with:
+    # The service to deploy to your cluster
+    service: # optional, default is ENV['SERVICE']
+    # GitHub repository that controls your cluster
+    cluster-repo: # optional, default is ENV['CLUSTER_REPO']
+    # Remotely hosted target image
+    target-image: # optional, default is ENV['TARGET_IMAGE']
+    # Desired namespace, or inferred from $GITHUB_HEAD_REF
+    namespace: # optional, default is ENV['GITHUB_HEAD_REF']
+    # Image tag, or inferred from $GITHUB_SHA
+    tag: # optional, default is ENV['GITHUB_SHA']
+    # GitHub access token with cluster-repo's access, _NOT_ $GITHUB_TOKEN
+    token: # optional, default is ENV['TOKEN']
+    # Modifies manifests for automated Flux deployments
+    flux: # optional
+    # Print out yaml files to be created in GitHub - Do NOT commit
+    dry-run: # optional
+    # Run Kustomize build during dry-run
+    built: # optional
+    - name: Kustomized Namespace - Cleanup Overlay
+  # You may pin to the exact commit or the version.
+  # uses: dudo/cleanup_kustomized_namespace@9c4d4ff8d0d6bec1bb74705fa29cd495f8c5f514
+  uses: dudo/cleanup_kustomized_namespace@v1.2.0
+  with:
+    # GitHub repository that controls your cluster
+    cluster-repo: # optional, default is ENV['CLUSTER_REPO']
+    # Desired namespace, or inferred from GITHUB_HEAD_REF
+    namespace: # optional, default is ENV['GITHUB_HEAD_REF']
+    # GitHub access token with cluster-repo's access, _NOT_ GITHUB_TOKEN
+    token: # optional, default is ENV['TOKEN']
+    # Modifies manifests for automated Flux deployments
+    flux: # optional
+    # Print out yaml files to be created in GitHub - Do NOT commit
+    dry-run: # optional
+    - name: git-ftp-action
+  # You may pin to the exact commit or the version.
+  # uses: sebastianpopp/git-ftp-action@33a94c0e0fce59ca477baa9d1748a5f2e53fb429
+  uses: sebastianpopp/git-ftp-action@3.0.0
+  with:
+    # URL
+    url: 
+    # FTP login name
+    user: 
+    # FTP password
+    password: 
+    # Specifies a local directory to sync from as if it were the git project root path.
+    syncroot: # optional, default is .
+    # Additional options
+    options: # optional, default is --auto-init
+    - name: Balena Push
+  # You may pin to the exact commit or the version.
+  # uses: theaccordance/balena-push@eee036073026ad3205c3143f6a23ebbe79789495
+  uses: theaccordance/balena-push@v1.0.0
+  with:
+    # API Key to interact with BalenaCloud
+    api-token: 
+    # name of the BalenaCloud application
+    application-name: 
+    # Optional. Provide a subfolder path, example: ./balena-wpe
+    application-path: # optional, default is .
+    - name: github-pr-release-action
+  # You may pin to the exact commit or the version.
+  # uses: miyucy/github-pr-release-action@890e0c6e3b236468fa3af290b64ac7c2328c8ed4
+  uses: miyucy/github-pr-release-action@v0.0.1
+  with:
+    # token
+    token: # optional
+    # owner
+    owner: # optional
+    # repo
+    repo: # optional
+    # head(develop)
+    head: # optional
+    # base(master)
+    base: # optional
+    - name: action-ebuild-release
+  # You may pin to the exact commit or the version.
+  # uses: hacking-gentoo/action-ebuild-release@ea82583fd2fd3a9786f8baac99a81e4dc7c78817
+  uses: hacking-gentoo/action-ebuild-release@v1
+  with:
+    # The authentiation token to use when creating pull requests.
+    auth_token: 
+    # The deploy key used when accessing the overlay repository.
+    deploy_key: 
+    # The overlay repository to operate on (eg. hacking-gentoo/overlay)
+    overlay_repo: 
+    # The repository branch to operate on. If none specified a topic branch named after the category/package will be used.
+    overlay_branch: # optional
+    # This is a package only ebuild for upstream source code.
+    package_only: # optional
+    - name: Get Package
+  # You may pin to the exact commit or the version.
+  # uses: mstksg/get-package@4eda30bb5c6ac62c0f3921dd5884b6ef8fc89ab2
+  uses: mstksg/get-package@v1
+  with:
+    # Space-separated list of packages to install using brew install.  Will
+only run if on OSX.
+
+    brew: # optional
+    # Space-separated list of packages to install using apt-get.  Will
+only run if on ubuntu.
+
+    apt-get: # optional
+    - name: esquio-rolloff
+  # You may pin to the exact commit or the version.
+  # uses: Xabaril/EsquioRolloffAction@1a51b3421ab3605991b4f05421a5fd77eb897951
+  uses: Xabaril/EsquioRolloffAction@v1.0.0-beta.1
+  with:
+    # Esquio URL
+    esquioUrl: # optional
+    # Esquio API KEy (keep it secret)
+    esquioApiKey: # optional
+    # Flag Id
+    flagId: # optional
+    - name: JXBuild
+  # You may pin to the exact commit or the version.
+  # uses: mavrosxristoforos/jxb@b696cf5e17532e2ce210436b03ce54dccf86c340
+  uses: mavrosxristoforos/jxb@1.0
+  with:
+    # The jxb file with the instructions on how to build the extension.
+    build-file: # default is build.jxb
+    - name: Github Pages Custom Deploy
+  # You may pin to the exact commit or the version.
+  # uses: sterlingwes/gh-pages-deploy-action@8b237b6c575f341cd5c28660337a21869e222f62
+  uses: sterlingwes/gh-pages-deploy-action@v1.1
+  with:
+    # A personal access token needed to push your site after it has been built.
+    access-token: 
+    # The subdirectory that your build command outputs your site assets to.
+    source-directory: # default is 
+    # The build command that should be run to generate your site.
+    build-command: # default is 
+    # The branch expected by GitHub to have the static files needed for your site.
+    deploy-branch: # optional, default is gh-pages
+    # The custom domain you want your Github Pages site to be served from.
+    custom-domain: # optional, default is 
+    - name: Simple commit
+  # You may pin to the exact commit or the version.
+  # uses: zwaldowski/git-commit-action@66730766679672410dc04830ae6389f4376c8c94
+  uses: zwaldowski/git-commit-action@v1
+  with:
+    # Directory to create commit in
+    working_directory: # optional, default is .
+    # Commit message
+    commit_message: # default is Automated commit
+    # Name to use for commit author
+    author_name: # optional, default is GitHub Actions
+    # Email to use for commit author
+    author_email: # optional, default is actions@github.com
+    - name: Hugo Deploy To Zeit
+  # You may pin to the exact commit or the version.
+  # uses: spankie/hugo-deploy-to-zeit@f05cd68b04d596aad411097865be1760f128d70d
+  uses: spankie/hugo-deploy-to-zeit@v1.0
+  with:
+    # A token provided on your zeit dashboard, to allow deployment to zeit
+    ZEIT_TOKEN: 
+    # This allows you to control which version of Hugo you want to use. There is a default within the action, but this may be out of date.
+    HUGO_VERSION: # optional, default is 0.59.1
+    - name: SSH command runner
+  # You may pin to the exact commit or the version.
+  # uses: Evaneos/ssh-action@0e5f8933569a924cad91d22e30f7ecfb5d8426f2
+  uses: Evaneos/ssh-action@v0.1.0
+  with:
+    # Remote host(s) to connect to
+    hosts: 
+    # One or multiple commands to run on the remote host(s)
+    commands: 
+    # Remote user to connect with
+    user: 
+    # Remote port to connect to
+    port: # optional, default is 22
+    # Private SSH key to connect with
+    private_key: # optional
+    # Password to connect with
+    password: # optional
+    # Known hosts keys that SSH can rely on to connect to the remote host(s)
+    known_hosts: # optional
+    # Knock sequence performed onto the remote host before connecting to it
+    knock_sequence: # optional
+    # SSH config to use to connect to the remote host(s)
+    ssh_config: # optional
+    - name: Hexo Deploy Action With CNAME
+  # You may pin to the exact commit or the version.
+  # uses: y4code/hexo-deploy-action@68ef912c48587a1168e2da4c5847aa11b27093ff
+  uses: y4code/hexo-deploy-action@1.0.1
+  - name: Azure Zip Deploy
+  # You may pin to the exact commit or the version.
+  # uses: srijken/azure-zip-deploy@e58111b640f50a24d1eb293f8e0b24d57a1c734b
+  uses: srijken/azure-zip-deploy@v1.0.1
+  with:
+    # the zip file
+    zip-file: 
+    # Publish profile (*.publishsettings) file contents with Web Deploy secrets
+    publish-profile: 
+    - name: RSyncer Action
+  # You may pin to the exact commit or the version.
+  # uses: Pendect/action-rsyncer@2554a1e574cf229fb144f23ea5971dbdca8ae8e3
+  uses: Pendect/action-rsyncer@v1.1.0
+  with:
+    # Rsync flags
+    flags: # default is -avzr --delete
+    # Rsync options (exclusion)
+    options: # default is 
+    # SSH command line options
+    ssh_options: # default is 
+    # Local folder to be synced
+    src: 
+    # Remote server and path. i.e user@server.com:/var/www/server.com/
+    dest: 
+    - name: RSyncer Action
+  # You may pin to the exact commit or the version.
+  # uses: Pendect/action-rsyncer@2554a1e574cf229fb144f23ea5971dbdca8ae8e3
+  uses: Pendect/action-rsyncer@v1.1.0
+  with:
+    # Rsync flags
+    flags: # default is -avzr --delete
+    # Rsync options (exclusion)
+    options: # default is 
+    # SSH command line options
+    ssh_options: # default is 
+    # Local folder to be synced
+    src: 
+    # Remote server and path. i.e user@server.com:/var/www/server.com/
+    dest: 
+    - name: RSyncer Action
+  # You may pin to the exact commit or the version.
+  # uses: Pendect/action-rsyncer@2554a1e574cf229fb144f23ea5971dbdca8ae8e3
+  uses: Pendect/action-rsyncer@v1.1.0
+  with:
+    # Rsync flags
+    flags: # default is -avzr --delete
+    # Rsync options (exclusion)
+    options: # default is 
+    # SSH command line options
+    ssh_options: # default is 
+    # Local folder to be synced
+    src: 
+    # Remote server and path. i.e user@server.com:/var/www/server.com/
+    dest: 
+    - name: RSyncer Action
+  # You may pin to the exact commit or the version.
+  # uses: Pendect/action-rsyncer@2554a1e574cf229fb144f23ea5971dbdca8ae8e3
+  uses: Pendect/action-rsyncer@v1.1.0
+  with:
+    # Rsync flags
+    flags: # default is -avzr --delete
+    # Rsync options (exclusion)
+    options: # default is 
+    # SSH command line options
+    ssh_options: # default is 
+    # Local folder to be synced
+    src: 
+    # Remote server and path. i.e user@server.com:/var/www/server.com/
+    dest: 
+    - name: WordPress Plugin Readme/Assets Update
+  # You may pin to the exact commit or the version.
+  # uses: 10up/action-wordpress-plugin-asset-update@d02f280e27626321355accc7a237abf9a58f5275
+  uses: 10up/action-wordpress-plugin-asset-update@1.4.1
+  - name: Sunstone Template Update
+  # You may pin to the exact commit or the version.
+  # uses: sunstone-dev/actions@4f15c5793c03f177ee499af59fc073721e5301ab
+  uses: sunstone-dev/actions@v1
+  with:
+    # Username
+    username: # default is 
+    # API key (get from https://apps.sunstone.dev/account)
+    apiKey: # default is 
+    # Your private Sunstone repository ID
+    repositoryId: # default is 
+    # Path to your template (for example "deployments/my-deployment.yml")
+    templatePath: # default is 
+    - name: Convox Deploy
+  # You may pin to the exact commit or the version.
+  # uses: convox/action-deploy@18d4bbda291b35b68cd35c052ad1032bc2fb2aba
+  uses: convox/action-deploy@v1
+  with:
+    # Convox Rack name
+    rack: 
+    # Convox app name
+    app: 
+    # Convox deploy key value
+    password: # optional
+    # Convox Console host address
+    host: # optional, default is console.convox.com
+    - name: Deploy to GitHub Pages - Python
+  # You may pin to the exact commit or the version.
+  # uses: JacksonMaxfield/github-pages-deploy-action-python@17d33ff802dccee8cd2c98a5dbd26c3648b4027a
+  uses: JacksonMaxfield/github-pages-deploy-action-python@2.1.0
+  - name: Subtree Sync
+  # You may pin to the exact commit or the version.
+  # uses: xedi/action-subtree-sync@642ad45d85541842edb617c962b23d3c417d3884
+  uses: xedi/action-subtree-sync@1.0.0
+  with:
+    # Full name of the subtree repository (e.g. owner/repository)
+    subtree: 
+    # Deploy key for the subtree repository
+    subtree_deploy_key: 
+    # Prefix for the split
+    split_prefix: 
+    - name: ZEIT Now Deployment
+  # You may pin to the exact commit or the version.
+  # uses: amondnet/now-deployment@50158d9877e2d00e08f08ac094cf7223b1c505bb
+  uses: amondnet/now-deployment@v2.0.3
+  with:
+    # zeit.co token
+    zeit-token: 
+    # 
+    now-args: # optional, default is 
+    # if you want to comment on pr and commit, set true, default: true
+    github-comment: # optional, default is true
+    # if you want to comment on pr and commit, set token
+    github-token: # optional
+    # if you want to create github deployment, set true, default: false
+    github-deployment: # optional, default is false
+    # the working directory
+    working-directory: # optional
+    # Now CLI 17+, ❗️  The `name` property in now.json is deprecated (https://zeit.ink/5F)
+    now-project-id: # optional
+    # Now CLI 17+, ❗️  The `name` property in now.json is deprecated (https://zeit.ink/5F)
+    now-org-id: # optional
+    - name: Upload Asset with Pattern
+  # You may pin to the exact commit or the version.
+  # uses: WebFreak001/upload-asset@ec7ddf75ef157c74cc59b8e15c58aedcc4762442
+  uses: WebFreak001/upload-asset@v1.0.0
+  with:
+    # Input file path to upload
+    file: 
+    # The mime type of the file
+    mime: 
+    # Pattern to name file as on the upload with variable expansion supporting environment variables
+    name: # optional
+    - name: UPX Action
+  # You may pin to the exact commit or the version.
+  # uses: gacts/upx@65347bae841189e25abe0df3941ce61be5e8bf9c
+  uses: gacts/upx@v1.0.1
+  with:
+    # Input file
+    file: # optional
+    # Input directory
+    dir: # optional
+    # Arguments to pass to UPX
+    upx_args: 
+    - name: Publish Gatsby Site
+  # You may pin to the exact commit or the version.
+  # uses: xmflsct/action-publish-gatsby@1f2db93ef604d3f81442879569fc2aae9dd19918
+  uses: xmflsct/action-publish-gatsby@v1.0.0
+  with:
+    # The branch that GitHub Pages is being exposed to.
+    publishBranch: # optional, default is master
+    # Personal Access Token in order to publish to GitHub Pages.
+    token: 
+    # Your name to include in the commit.
+    name: # optional, default is Zhiyuan Zheng
+    # Your email to include in the commit.
+    email: # optional, default is me@xmflsct.com
+    - name: GitHub Releases
+  # You may pin to the exact commit or the version.
+  # uses: fnkr/github-action-ghr@96b1448dc6162f370067e1de51e856e733a76b4f
+  uses: fnkr/github-action-ghr@v1.3
+  - name: Setup Secure Shell (SSH)
+  # You may pin to the exact commit or the version.
+  # uses: kopepasah/setup-secure-shell@7934f038d772fa8fcf042e334770784da7e59013
+  uses: kopepasah/setup-secure-shell@0.1.0
+  with:
+    # Configuration for Secure Shell.
+    ssh-config: # optional
+    # Known Hosts for Secure Shell.
+    ssh-known-hosts: andrea-mariadb-2
+    # Private Key for Secure Shell.
+    ssh-private-key:  bbe23615a7fdf6ad77d5fefb2622a6e7f4bd6567
+    - name: Build and sign WebExtension
+  # You may pin to the exact commit or the version.
+  # uses: Saphareas/sign-web-extension-action@0758a01886e70b7d1e151ed391701e048bd4999d
+  uses: Saphareas/sign-web-extension-action@v0.1
+  with:
+    # Your key for Mozilla's API
+    amo-api-key: 
+    # Your secret for Mozilla's API
+    amo-api-secret: 
+    # UUID of your existing extension. Signing new extensions is not supported.
+    web-ext-id: 
+    # Set to 'true' to list the extension on AMO. Defaults to 'false' for unlisted signing.
+    sign-listed: 
+    - name: Pulumi installer
+  # You may pin to the exact commit or the version.
+  # uses: prepor/setup-pulumi@d928df73e0dcd925fa234a3304ef0361d2d76956
+  uses: prepor/setup-pulumi@1
+  with:
+    # Version of pulumi
+    version: # default is 1.3.4
+    - name: Pulumi runner
+  # You may pin to the exact commit or the version.
+  # uses: prepor/github-pulumi@b091e89711738b670b132a87ee70a029b3383bba
+  uses: prepor/github-pulumi@1
+  with:
+    # Pulumi Stack to working with
+    stack: 
+    # pulumi args to run with
+    args: 
+    # Supported values: pr & up
+    mode: # optional
+    # Pulumi's root path
+    root: # optional
+    # Leave a comment for PRs
+    comment-on-pr: # optional
+    # Github Token
+    github-token: # optional
+    - name: Terraform Apply for AWS
+  # You may pin to the exact commit or the version.
+  # uses: kciter/terraform-apply-for-aws-action@4d4f5092ea794fe54baf80c0ab089133f3996d9a
+  uses: kciter/terraform-apply-for-aws-action@v3
+  with:
+    # The AWS access key id
+    access_key_id: 
+    # The AWS secret access key
+    secret_access_key: 
+    # The AWS default region
+    region: 
+    # Comma-separated string of Terraform variables
+    variables: # optional, default is 
+    # Path to Terraform directory, defaults to the working directory
+    path: # optional, default is .
+    - name: AWS S3 Sync Action
+  # You may pin to the exact commit or the version.
+  # uses: awact/s3-action@2f4240b4062539841088be5aaa2e119c400d4a1b
+  uses: awact/s3-action@0.1.1
+  with:
+    # AWS Access Key. [AWS Docs](https://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html)
+    AWS_ACCESS_KEY_ID: 
+    # AWS Secret Access Key. [AWS Docs](https://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html)
+    AWS_SECRET_ACCESS_KEY: 
+    # The Name of the S3 Bucket.
+    AWS_S3_BUCKET: 
+    # Region of the S3 Bucket
+    AWS_REGION: 
+    # Local Directory to Sync/Upload to S3.
+    SOURCE_DIR: # optional
+    - name: github-action-build
+  # You may pin to the exact commit or the version.
+  # uses: skx/github-action-build@b5ed59cca02a059c66dc815b6abe92eb5a0b913d
+  uses: skx/github-action-build@release-0.6.1
+  with:
+    # The path to the build-script to run, within the repository.
+    builder: # optional, default is .github/build
+    - name: Dokku Deploy action
+  # You may pin to the exact commit or the version.
+  # uses: idoberko2/dokku-deploy-github-action@4b326b36625e4a10add5f9601e8ffbaf048444b9
+  uses: idoberko2/dokku-deploy-github-action@v1
+  with:
+    # The ssh private key to the dokku instance. WARNING: use a secret! Do not pass a plain text value!
+    ssh-private-key: 
+    # The user to use for ssh (Default: dokku)
+    dokku-user: # optional, default is dokku
+    # The dokku host to ssh into
+    dokku-host: 
+    # The dokku app name
+    app-name: 
+    # The branch to push on the remote repository (Default: master)
+    remote-branch: # optional, default is master
+    # Additional flags to be passed to the git push command. Could be used to force push
+    git-push-flags: # optional, default is 
+    - name: action-maven-publish
+  # You may pin to the exact commit or the version.
+  # uses: samuelmeuli/action-maven-publish@201a45a3f311b2ee888f252ba9f4194257545709
+  uses: samuelmeuli/action-maven-publish@v1.4.0
+  with:
+    # GPG private key for signing the published artifacts
+    gpg_private_key: # optional
+    # Passphrase for the GPG key
+    gpg_passphrase: # optional
+    # Username (not email!) for your Nexus repository manager account
+    nexus_username: 
+    # Password for your Nexus account
+    nexus_password: 
+    # Nexus server ID as specified in your project's `nexus-staging-maven-plugin` and `distributionManagement` configurations
+    server_id: # optional, default is ossrh
+    # Directory of the Maven project which should be deployed
+    directory: # optional
+    # Maven goals and build phases to execute
+    maven_goals_phases: # optional, default is clean deploy
+    # Additional arguments to pass to the Maven command
+    maven_args: # optional, default is 
+    # Active Maven profiles
+    maven_profiles: # optional, default is deploy
+    - name: S3 Sync
+  # You may pin to the exact commit or the version.
+  # uses: jakejarvis/s3-sync-action@be0c4ab89158cac4278689ebedd8407dd5f35a83
+  uses: jakejarvis/s3-sync-action@v0.5.1
+  - name: Git HTTPS push deploy
+  # You may pin to the exact commit or the version.
+  # uses: ilkka/git-https-push-action@2ec0269dfc83018e42793e693cb114f897154e4b
+  uses: ilkka/git-https-push-action@v1.1.0
+  with:
+    # Origin to push to
+    remoteUrl: 
+    # Skip git hooks with --no-verify
+    skipHooks: # optional
+    - name: Docker iamge publischer
+  # You may pin to the exact commit or the version.
+  # uses: lBeJIuk/adip@2fdf1059470ce6e4db04f86d3a84975f989e6019
+  uses: lBeJIuk/adip@v1
+  with:
+    # Variable for password
+    PASSWORD: 
+    # Variable for token
+    TOKEN: 
+    # 
+    PACKAGE_REPOSITORY: 
+    # Variable image registry
+    REGISTRY: # optional, default is docker.pkg.github.com
+    # Variable for app name
+    APP_NAME: # optional
+    # Variable for username
+    USERNAME: # optional
+    # Shows where the Dockerfile is
+    CONTEXT: # optional
+    - name: esquio-rollout
+  # You may pin to the exact commit or the version.
+  # uses: Xabaril/EsquioRolloutAction@a0314bb10637c487b6978716fc346ec1af144079
+  uses: Xabaril/EsquioRolloutAction@v1.0.0-beta.1
+  with:
+    # Esquio URL
+    esquioUrl: # optional
+    # Esquio API KEy (keep it secret)
+    esquioApiKey: # optional
+    # Flag Id
+    flagId: # optional
+    - name: Update git branch
+  # You may pin to the exact commit or the version.
+  # uses: Embraser01/update-git-branch-action@36713b64f99cf4f4752e4b7ede74be8f81eb7788
+  uses: Embraser01/update-git-branch-action@v1.0.0
+  with:
+    # Branch updated by this action
+    branch: 
+    # Whether to use -f flag to update the branch
+    force: # optional, default is 0
+    # Repo's Github token
+    githubToken: 
+    - name: Deployment Status Update
+  # You may pin to the exact commit or the version.
+  # uses: rsotnychenko/deployment-status-update@06e6b80279dbe8e8fbbcf68abd71db485a6c33e7
+  uses: rsotnychenko/deployment-status-update@0.2.0
+  with:
+    # Set this to `github.run_id` so the deployment status log URL can be properly set.
+    run_id: 
+    # desired deployment status
+    status: 
+    # description to deployment status
+    description: # optional, default is 
+    # Adds a new inactive status to all prior non-transient, non-production environment deployments with the same repository and environment name as the created deployment status.
+    auto_inactive: # optional, default is true
+    # Sets the URL for accessing your environment
+    environment_url: # optional, default is 
+    # Override the default deployment status URL.
+    deployment_status_url: # optional
+    - name: GitHub Branch Deploy
+  # You may pin to the exact commit or the version.
+  # uses: zekth/gh-deploy-action@e6bea0af4cdbd72ddb5c9da220be65a6ba659686
+  uses: zekth/gh-deploy-action@1.0.0
+  with:
+    # Directory to deploy
+    build_dir: # optional
+    # Personnal access token
+    gh_token: 
+    # FQDN to deploy in CNAME file
+    fqdn: # optional
+    # Branch targeted for the deployment
+    target_branch: # optional, default is gh-pages
+    - name: Trigger GitLab CI Job
+  # You may pin to the exact commit or the version.
+  # uses: appleboy/gitlab-ci-action@64e3a31d93c8b1242847366dbed93573fd10a591
+  uses: appleboy/gitlab-ci-action@v0.0.2
+  with:
+    # gitlab-ci base url
+    host: # optional, default is https://gitlab.com
+    # gitlab-ci token
+    token: 
+    # gitlab-ci valid refs are only the branches and tags
+    ref: # optional
+    # gitlab project id
+    project_id: 
+    # debug mode
+    debug: # optional
+    - name: Setup Stack
+  # You may pin to the exact commit or the version.
+  # uses: mstksg/setup-stack@69e4283faeb7a89f26326daa36e9cc0fa7a023bd
+  uses: mstksg/setup-stack@v2
+  - name: rsync-with-ssh-github-actions
+  # You may pin to the exact commit or the version.
+  # uses: BuildPC/rsync-with-ssh-github-actions@3fd705f943a26f34ddb2e5707cdeaf0eb559b44e
+  uses: BuildPC/rsync-with-ssh-github-actions@1.0.1
+  with:
+    # ssh remote host
+    host: # optional
+    # ssh remote port
+    port: # optional, default is 22
+    # ssh user
+    user: # optional
+    # content of ssh private key. ex raw content of ~/.ssh/id_rsa
+    key: # optional
+    # the path where rsync will use as destination
+    destination: # optional
+    # execute commands before rsync
+    ssh_before: # optional
+    # execute commands after rsync
+    ssh_after: # optional
+    # arguments to pass for rsync
+    args: # optional
+    - name: cached-docker-build-push
+  # You may pin to the exact commit or the version.
+  # uses: devmasx/cached-docker-build-push@08c3804a6bad9d1ef911f16a97481d9aafb3a35a
+  uses: devmasx/cached-docker-build-push@v0.2.0
+  with:
+    # Image name, required
+    image_name: 
+    # Image tag, default $GITHUB_SHA
+    image_tag: # optional
+    # Image name for the cache image, default $IMAGE_NAME:cache-$CACHE_STAGE_TARGET
+    cache_image_name: # optional
+    # Name of the stage target for use in cache, two images will be compiled, the stage target and the last stage.
+    cache_stage_target: # optional
+    # Add any docker build flag, --build-params='--build-arg=TOKEN=$TOKEN'
+    build_params: # optional
+    - name: esquio-rolloff-v2
+  # You may pin to the exact commit or the version.
+  # uses: Xabaril/EsquioRolloffActionV2@9a6ed0aeac9584eabe09bf5c3eadbde4a2643fa6
+  uses: Xabaril/EsquioRolloffActionV2@v2.1
+  with:
+    # Esquio URL (V2)
+    esquioUrl: # optional
+    # Esquio API KEy (keep it secret)
+    esquioApiKey: # optional
+    # Product name
+    productName: # optional
+    # Feature name
+    featureName: # optional
+    - name: esquio-rollout-v2
+  # You may pin to the exact commit or the version.
+  # uses: Xabaril/EsquioRolloutActionV2@9f195434c043003f222f59004c8b0b6bb52d45d1
+  uses: Xabaril/EsquioRolloutActionV2@v2.3
+  with:
+    # Esquio URL
+    esquioUrl: # optional
+    # Esquio API KEy (keep it secret)
+    esquioApiKey: # optional
+    # Product name
+    productName: # optional
+    # Feature name
+    featureName: # optional
+    - name: esquio-rollout-v2
+  # You may pin to the exact commit or the version.
+  # uses: Xabaril/EsquioRolloutActionV2@9f195434c043003f222f59004c8b0b6bb52d45d1
+  uses: Xabaril/EsquioRolloutActionV2@v2.3
+  with:
+    # Esquio URL
+    esquioUrl: # optional
+    # Esquio API KEy (keep it secret)
+    esquioApiKey: # optional
+    # Product name
+    productName: # optional
+    # Feature name
+    featureName: # optional
+    - name: Setup Porter
+  # You may pin to the exact commit or the version.
+  # uses: getporter/gh-action@d8539f57d75587d98651fc94de9e7e63abfaf75e
+  uses: getporter/gh-action@v0.1.1
+  with:
+    # Specify which version of Porter to install. Any version from v0.18.1-beta.2 onwards is valid. If left blank, will default to latest.
+    porter_version: # optional, default is latest
+    - name: Talend Publish to Cloud Action
+  # You may pin to the exact commit or the version.
+  # uses: Talend/publish-to-cloud@a777e106550e236524225d6981ebf7f13f46f0ac
+  uses: Talend/publish-to-cloud@v1.0
+  with:
+    # Talend Cloud Project name (always uppercase in your git repository)
+    project: 
+    # P2 repository URL
+    updatesite_path: 
+    # Talend Cloud URL
+    service_url: # optional, default is https://tmc.us.cloud.talend.com/inventory/
+    # Publish accelerate option (default to true)
+    service_accelerate: # optional, default is true
+    # Talend Personal Access token (PAT) for Talend Cloud
+    cloud_token: 
+    # Publish skip option (defaut to false)
+    cloud_publisher_skip: # optional, default is false
+    # Talend Personal Access token (PAT) for Talend Cloud
+    cloud_publisher_screenshot: # optional, default is true
+    # Updateflow option (default to true)
+    cloud_publisher_updateflow: # optional, default is true
+    # Talend Cloud environment
+    cloud_publisher_environment: # optional, default is <default>
+    # Talend Cloud workspace
+    cloud_publisher_workspace: # optional, default is Personal
+    # Nexus URL for Talend Maven plugins and shared custom libraries
+    nexus_url: 
+    # Nexus username
+    nexus_username: 
+    # Nexus password
+    nexus_password: 
+    # Talend license path in your repository. Make sure to encrypt your license.
+    license_path: # optional, default is license.gpg
+    # Passphrase used to encrypt Talend license in your repository. Make sure to store the passphrase in a secret.
+    license_passphrase: 
+    - name: Middleman Github Pages Action
+  # You may pin to the exact commit or the version.
+  # uses: yurikoval/middleman-gh-pages-action@69b82c455bc90a0327079f891e3f525fb9ff8567
+  uses: yurikoval/middleman-gh-pages-action@v1.0.0
+  with:
+    # Github repository to push built site to
+    GITHUB_REPOSITORY: 
+    # Name of the deploy actor
+    GITHUB_ACTOR: # optional, default is deploy
+    # Location of Middleman project within your repo
+    SITE_LOCATION: # optional, default is .
+    # Location where Middleman builds your website
+    BUILD_LOCATION: # optional, default is build
+    # Branch name to push built sity to
+    REMOTE_BRANCH: # optional, default is gh-pages
+    - name: NPM Simple Publisher
+  # You may pin to the exact commit or the version.
+  # uses: pedromcunha/npm-publisher@2d11e440921fe514fc20273e76e2c4213e34d27f
+  uses: pedromcunha/npm-publisher@0.0.3
+  with:
+    # Name of the npm package
+    packageName: 
+    # Access level for the NPM package
+    access: # optional, default is restricted
+    - name: Koha Plugin kpz Builder
+  # You may pin to the exact commit or the version.
+  # uses: bywatersolutions/github-action-koha-plugin-create-kpz@78737a0c01ae96bb3af83960ebaa48a8d2878a36
+  uses: bywatersolutions/github-action-koha-plugin-create-kpz@v2
+  with:
+    # Version for this koha plugin release, e.g. v1.0.3
+    release-version: 
+    # Name of plugin repo, e.g. koha-plugin-kitchen-sink
+    release-name: 
+    - name: Chrome Extension upload & publish
+  # You may pin to the exact commit or the version.
+  # uses: Passiverecords/chrome-extension-upload-action@d46910ee6515270bde08c1fe2bf0bceaaf5d7fb7
+  uses: Passiverecords/chrome-extension-upload-action@1.4.1
+  with:
+    # Auth refresh token
+    refresh-token: 
+    # Extension application target id
+    app-id: 
+    # Token client id
+    client-id: 
+    # Token client secret
+    client-secret: 
+    # Name of zipped target upload file
+    file-name: 
+    # True Or False to publish after upload
+    publish: 
+    - name: Azure Storage Action
+  # You may pin to the exact commit or the version.
+  # uses: lauchacarro/Azure-Storage-Action@8191060b843f0a4240dc4759a6c1de0fc624069e
+  uses: lauchacarro/Azure-Storage-Action@v1.1
+  with:
+    # Connection String of the Azure Storage Container
+    connection-string: 
+    # Folder what contains the files for upload to Storage Container
+    folder: # optional
+    # Name of Blob Container Storage
+    blob-container-name: # optional
+    # Access Policy to update in the Container
+    public-access-policy: # optional
+    # Enabled static website
+    enabled-static-website: # optional
+    - name: YQ Script
+  # You may pin to the exact commit or the version.
+  # uses: awesome-global-contributions/action-yq@298c79cf480478e87b528edd170f65a95cbd6215
+  uses: awesome-global-contributions/action-yq@v1.0.2
+  with:
+    # The shell script to run
+    file: 
+    - name: Amazon ECS "Render Task Definition" Action
+  # You may pin to the exact commit or the version.
+  # uses: brunocascio/amazon-ecs-render-task-definition@8538c54af20035da4b3ae8849a1a02fec41933b3
+  uses: brunocascio/amazon-ecs-render-task-definition@v1.2.0
+  with:
+    # The path to the ECS task definition JSON file
+    task-definition: 
+    # The name of the container defined in the containerDefinitions section of the ECS task definition
+    container-name: 
+    # The URI of the container image to insert into the ECS task definition
+    image: 
+    # The name of secrets manager to be retrieved
+    aws-sm-name: # optional
+    - name: rust-mdbook
+  # You may pin to the exact commit or the version.
+  # uses: ryankurte/action-mdbook@3b497aef185dd1f127e3a6a0c080ea04d8d8c8c9
+  uses: ryankurte/action-mdbook@0.1.1
+  with:
+    # mdbook input directory
+    inputDir: # optional
+    # mdbook output directory
+    outputDir: # optional
+    - name: rust-mdbook
+  # You may pin to the exact commit or the version.
+  # uses: ryankurte/action-mdbook@3b497aef185dd1f127e3a6a0c080ea04d8d8c8c9
+  uses: ryankurte/action-mdbook@0.1.1
+  with:
+    # mdbook input directory
+    inputDir: # optional
+    # mdbook output directory
+    outputDir: # optional
+    - name: Setup Sentinel
+  # You may pin to the exact commit or the version.
+  # uses: innovationnorway/setup-sentinel@3e20e6859ba6ac88d33e691545c610c00b947172
+  uses: innovationnorway/setup-sentinel@v1.0.0
+  with:
+    # The Sentinel version to download (if necessary) and use. Example: ~> 0.13
+    version: # optional, default is 0.13
+    - name: Create GitHub API Deployment
+  # You may pin to the exact commit or the version.
+  # uses: abendigo/create-deployment@a1ea7201989b452a27beda09402be3adebf48524
+  uses: abendigo/create-deployment@v1
+  with:
+    # This should be a token with access to your repository scoped in as a secret
+    token: 
+    # The ref to deploy. This can be a branch, tag, or SHA. Defaults to the value of ${GITHUB_GITHUB_REPOSITORY}
+    ref: # optional
+    # Specifies a task to execute (e.g., deploy or deploy:migrations)
+    task: # optional
+    # JSON payload with extra information about the deployment
+    payload: # optional
+    # Name for the target deployment environment (e.g., production, staging, qa)
+    environment: # optional
+    # Short description of the deployment
+    description: # optional
+    - name: Create GitHub deployment
+  # You may pin to the exact commit or the version.
+  # uses: mkrakowitzer/actions-gh-deploy@b723c51c129ebcd2367c1870af65c8a9d724cdd3
+  uses: mkrakowitzer/actions-gh-deploy@1
+  with:
+    # Github Token
+    token: 
+    # Environment to deploy to
+    environment: # default is development
+    # Specifies a task to execute (e.g., deploy or deploy:migrations)
+    task: # default is deploy
+    # Description of the deploy
+    description: # optional, default is None
+    # Specifies if the given environment is specific to the deployment and will no longer exist at some point in the future
+    transient_environment: # optional, default is true
+    - name: Terraform destroy
+  # You may pin to the exact commit or the version.
+  # uses: daniyalj/terraform-destroy-actions@6262619d3c5971e362ba38eb8bea96a3f94c8ae1
+  uses: daniyalj/terraform-destroy-actions@v3
+  with:
+    # In the format of <org>
+    org_name: # default is john
+    # In the format of <repo>
+    repo_name: # default is doe
+    - name: Build saber your project
+  # You may pin to the exact commit or the version.
+  # uses: dredav/action-saber-build@946fcc120d4ddab13c03b727ba733dad9d24f8c1
+  uses: dredav/action-saber-build@v1.0
+  - name: GitVersion action
+  # You may pin to the exact commit or the version.
+  # uses: nmcc/actions-gitversion@4ab384d333506ede37c82ca3e03f4005b18b7573
+  uses: nmcc/actions-gitversion@v1
+  with:
+    # Path to the gitversion executable
+    path-to-gitversion: 
+    - name: Laravel Rsync Deploy
+  # You may pin to the exact commit or the version.
+  # uses: SHSharkar/Laravel-Rsync-Deploy@5a5d522c58e04d183842e98886164bcc86298dbe
+  uses: SHSharkar/Laravel-Rsync-Deploy@v1.0.0
+  with:
+    # Server SSH Private Key
+    SSH_PRIVATE_KEY: 
+    # Remote Host or IP
+    REMOTE_HOST: 
+    # Remote Host Port
+    REMOTE_HOST_PORT: 
+    # Remote User
+    REMOTE_USER: 
+    # Target directory
+    TARGET_DIRECTORY: # optional, default is ~/httpdocs
+    - name: Auto Release Draft
+  # You may pin to the exact commit or the version.
+  # uses: ecampidoglio/auto-release-draft@c1617ba27945d4c224bbe1552e924cf539b508e9
+  uses: ecampidoglio/auto-release-draft@v1.0.0
+  with:
+    # The GITHUB_TOKEN used to authenticate to the current repository
+    repo-token: 
+    - name: Treasure Workflow
+  # You may pin to the exact commit or the version.
+  # uses: toru-takahashi/treasure-workflow-actions@d9f5c35aef74336604feb94f704a6056d1a04d61
+  uses: toru-takahashi/treasure-workflow-actions@v0.0.2
+  with:
+    # Treasure Workflow API Endpoint
+    td_wf_endpoint: # default is api-workflow.treasuredata.com
+    # Treasure Data Master API
+    td_master_apikey: 
+    # Treasure Workflow Project Name
+    td_wf_project_name: 
+    - name: Cool GH Releases
+  # You may pin to the exact commit or the version.
+  # uses: Xotl/cool-github-releases@ef50014218e6139d534f725f69aabe3728ea9b2e
+  uses: Xotl/cool-github-releases@v1.1.2
+  with:
+    # Github secret used for operations
+    github_token: 
+    # Operation mode: download, update or delete. Default is download
+    mode: # default is download
+    # Path to file or asset name. Multiple files/assets can be specified using a semicolon as separator.
+    assets: # optional
+    # Release id to use for updateting a release or to download assets.
+    releaseId: # optional
+    # Tag used for download/upload assets and to create a release.
+    tag_name: # optional
+    # Name to use instead for the release, if not provided the tag_name will be used instead.
+    release_name: # optional
+    # Description markdown used when updating a release, or when creating one if initial_mrkdwn is not set.
+    body_mrkdwn: # optional
+    # Description markdown used only when creating a release.
+    initial_mrkdwn: # optional
+    # Set to true to indicate if it is a draft release.
+    isDraft: # optional
+    # Set to true if you want the release to be a prerelease.
+    isPrerelease: # optional
+    # Set to true if you want existing assets to be replaced. Without setting this they will cause the action to fail.
+    replace_assets: # optional
+    - name: Git pr release action
+  # You may pin to the exact commit or the version.
+  # uses: grassedge/git-pr-release-action@74169c50b9d00129f56a4b03b3309a2ab392f587
+  uses: grassedge/git-pr-release-action@v1.0
+  with:
+    # Default is current reopsitory's owner.
+    owner: # optional
+    # Default is current reopsitory's name.
+    repo: # optional
+    # Base branch of the release pull-request.
+    base: 
+    # Head branch of the release pull-request. Typically, it is the same as a subscribed branch.
+    head: 
+    # If true, assign each pull-req's assignees to the release pull-req
+    assign: # optional
+    # Labels that is added to the release pull-request
+    labels: # optional
+    # Path to the template you want to use.
+    template: # optional
+    # Used to generate the version string.
+    tz: # optional
+    # Used to create a pull request.
+    token: 
+    - name: Swift Publish Generate Static Site
+  # You may pin to the exact commit or the version.
+  # uses: joeblau/publish-generate-action@3dc0ca23f48c9e4647f0f96f083a6c47ebb1561a
+  uses: joeblau/publish-generate-action@1.0.0
+  - name: Bloom release ROS package
+  # You may pin to the exact commit or the version.
+  # uses: at-wat/bloom-release-action@8af806f6b3a56fcf7e0d627512a140620e649594
+  uses: at-wat/bloom-release-action@v0.0.8
+  with:
+    # ROS distributions to create a release.
+    ros_distro: 
+    # GitHub personal access token to push to your release repository and rosdistro fork.
+    github_token_bloom: 
+    # GitHub login name to push to your rosdistro fork.
+    github_user: 
+    # User name of commit author. Defaults to github_user.
+    git_user: # optional
+    # E-mail address of commit author.
+    git_email: 
+    # Override package repository name.
+    repository: # optional
+    # Override release repository push URL. Must be https.
+    release_repository_push_url: # optional
+    # Set true to add a tag automatically if not exist. It requires that the source code is checked out.
+    tag_and_release: # optional
+    # Set true to open PR on ros/rosdistro automatically.
+    open_pr: # optional
+    - name: jekyll-build-optional-deploy-gh-pages
+  # You may pin to the exact commit or the version.
+  # uses: agentd00nut/jekyll-build-optional-deploy-gh-pages@8a3e2f8a27b5557b87488bfa506d0bdbbda3c99c
+  uses: agentd00nut/jekyll-build-optional-deploy-gh-pages@v1
+  - name: Pull Request Comment Trigger
+  # You may pin to the exact commit or the version.
+  # uses: Khan/pull-request-comment-trigger@af6260d48c05e1f2f1641f9d14794bd04687c023
+  uses: Khan/pull-request-comment-trigger@1.0.0
+  with:
+    # The emoji "reaction" to put on the comment to indicate that the trigger was detected. For example, "rocket"
+    reaction: # optional
+    # The string to look for in pull-request descriptions and comments. For example "#build/android"
+    trigger: 
+    - name: Run playbook on Ansible Tower
+  # You may pin to the exact commit or the version.
+  # uses: vortegon/github-action-ansible-tower@f8da53fc7ea0e66e3011ed1182e3b1f3a60a48e7
+  uses: vortegon/github-action-ansible-tower@v1.0.5
+  with:
+    # Ansible Tower User
+    ansible-tower-user: 
+    # Ansible Tower Password
+    ansible-tower-pass: 
+    # Ansible Tower URL
+    ansible-tower-url: 
+    # Extra vars required by the ansible playbook
+    additional-vars: 
+    # Template id on Ansible Tower
+    template-id: 
+    
